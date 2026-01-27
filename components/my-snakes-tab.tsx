@@ -4,11 +4,10 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { SNAKE_TYPES, type SnakeNFT, type SnakeType } from "@/lib/snake-data"
-import { buySnake, getContractAddress, setContractAddress } from "@/lib/arc-web3"
+import { buySnake } from "@/lib/arc-web3"
 import { AlertCircle } from "lucide-react"
 import React from "react"
 import Image from "next/image"
-import { Input } from "@/components/ui/input"
 
 interface MySnakesTabProps {
   isWalletConnected: boolean
@@ -25,15 +24,8 @@ const SNAKE_MAX_ENERGY: Record<string, number> = {
 
 export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }: MySnakesTabProps) {
   const [purchasingSnake, setPurchasingSnake] = React.useState<string | null>(null)
-  const [contractAddress, setContractAddressState] = React.useState("")
-  const [contractInput, setContractInput] = React.useState("")
   const userSnakes = ownedSnakes; // Declare userSnakes variable
   const ownedTokenIds = React.useMemo(() => new Set(ownedSnakes.map((snake) => snake.tokenId)), [ownedSnakes])
-
-  React.useEffect(() => {
-    const existing = getContractAddress()
-    setContractAddressState(existing)
-  }, [])
 
   const handlePurchase = async (snake: SnakeType) => {
     if (!isWalletConnected) {
@@ -86,37 +78,6 @@ export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }:
           XP progression will be stored on-chain in future versions
         </p>
       </div>
-
-      {!contractAddress && (
-        <Card className="p-6 border-border gradient-card glow-primary">
-          <h3 className="text-xl font-bold mb-3 tracking-tight">Set Contract Address</h3>
-          <p className="text-muted-foreground text-sm mb-4">
-            Paste your deployed SnakeNFT address to enable purchases.
-          </p>
-          <div className="flex flex-col md:flex-row gap-3">
-            <Input
-              placeholder="0x..."
-              value={contractInput}
-              onChange={(event) => setContractInput(event.target.value)}
-            />
-            <Button
-              className="md:w-40"
-              onClick={() => {
-                const trimmed = contractInput.trim()
-                if (!trimmed) {
-                  alert("Please paste a contract address.")
-                  return
-                }
-                setContractAddress(trimmed)
-                setContractAddressState(trimmed)
-                setContractInput("")
-              }}
-            >
-              Save
-            </Button>
-          </div>
-        </Card>
-      )}
 
       <div className="space-y-6">
         <div className="border-t border-border/50 pt-8">
