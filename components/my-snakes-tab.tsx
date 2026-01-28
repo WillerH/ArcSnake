@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { SNAKE_TYPES, type SnakeNFT, type SnakeType } from "@/lib/snake-data"
 import { buySnake } from "@/lib/arc-web3"
+import { SNAKE_NFT_ADDRESS } from "@/lib/arc-config"
 import { AlertCircle } from "lucide-react"
 import React from "react"
 import Image from "next/image"
@@ -22,16 +23,14 @@ const SNAKE_MAX_ENERGY: Record<string, number> = {
   "Black Mamba": 3,
 }
 
+const isContractConfigured = Boolean(SNAKE_NFT_ADDRESS)
+
 export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }: MySnakesTabProps) {
   const [purchasingSnake, setPurchasingSnake] = React.useState<string | null>(null)
-  const userSnakes = ownedSnakes; // Declare userSnakes variable
   const ownedTokenIds = React.useMemo(() => new Set(ownedSnakes.map((snake) => snake.tokenId)), [ownedSnakes])
 
   const handlePurchase = async (snake: SnakeType) => {
-    if (!isWalletConnected) {
-      alert("Connect your wallet first.")
-      return
-    }
+    if (!isWalletConnected || !isContractConfigured) return
     setPurchasingSnake(snake.name)
     try {
       await buySnake(snake.tokenId, 1)
@@ -49,11 +48,7 @@ export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }:
       alert(`Successfully purchased ${snake.name} for ${snake.price} USDC! Your snake has full energy.`)
     } catch (error) {
       console.error(error)
-      if (error instanceof Error && error.message.includes("Missing contract address")) {
-        alert("Contract address is missing. Paste it in the field above and save.")
-      } else {
-        alert("Purchase failed. Please check your wallet and try again.")
-      }
+      alert("Purchase failed. Please check your wallet and try again.")
     } finally {
       setPurchasingSnake(null)
     }
@@ -65,6 +60,18 @@ export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }:
         <AlertCircle className="w-16 h-16 mx-auto mb-6 text-primary" />
         <h3 className="text-2xl font-bold mb-3 tracking-tight">Wallet Not Connected</h3>
         <p className="text-muted-foreground text-lg">Please connect your wallet to view your snake NFTs.</p>
+      </Card>
+    )
+  }
+
+  if (!isContractConfigured) {
+    return (
+      <Card className="p-12 text-center border-border gradient-card glow-primary">
+        <AlertCircle className="w-16 h-16 mx-auto mb-6 text-destructive" />
+        <h3 className="text-2xl font-bold mb-3 tracking-tight">Contract address not configured</h3>
+        <p className="text-muted-foreground text-lg">
+          The Snake NFT contract address is not set. Purchases are disabled. Please contact the site operator.
+        </p>
       </Card>
     )
   }
