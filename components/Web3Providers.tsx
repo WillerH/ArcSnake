@@ -38,7 +38,11 @@ export function Web3Providers({ children }: { children: React.ReactNode }) {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider chains={[arcTestnet]}>
+        <RainbowKitProvider
+          chains={[arcTestnet]}
+          modalSize="compact"
+          showRecentTransactions={true}
+        >
           {children}
         </RainbowKitProvider>
       </QueryClientProvider>
