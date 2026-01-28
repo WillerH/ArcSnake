@@ -50,3 +50,5 @@ export function Web3Providers({ children }: { children: React.ReactNode }) {
   )
 }
 
+export default Web3Providers
+

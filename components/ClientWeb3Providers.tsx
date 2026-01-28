@@ -1,8 +1,9 @@
 "use client"
 
+import type React from "react"
 import dynamic from "next/dynamic"
 
-const Web3Providers = dynamic(() => import("@/components/Web3Providers").then(mod => ({ default: mod.Web3Providers })), {
+const Web3Providers = dynamic(() => import("@/components/Web3Providers"), {
   ssr: false,
 })
 
