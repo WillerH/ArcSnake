@@ -5,22 +5,13 @@ export type EthereumProvider = {
   request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>;
 };
 
-const ADDRESS_STORAGE_KEY = "snake_nft_address";
-
 export function getEthereum(): EthereumProvider | null {
   if (typeof window === "undefined") return null;
   return (window as Window & { ethereum?: EthereumProvider }).ethereum || null;
 }
 
 export function getContractAddress() {
-  if (SNAKE_NFT_ADDRESS) return SNAKE_NFT_ADDRESS;
-  if (typeof window === "undefined") return "";
-  return localStorage.getItem(ADDRESS_STORAGE_KEY) || "";
-}
-
-export function setContractAddress(address: string) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(ADDRESS_STORAGE_KEY, address);
+  return SNAKE_NFT_ADDRESS;
 }
 
 export async function ensureArcNetwork(ethereum: EthereumProvider) {
@@ -69,6 +60,11 @@ export function getProvider() {
 }
 
 export async function getSigner() {
+  const ethereum = getEthereum();
+  if (!ethereum) {
+    throw new Error("MetaMask not detected");
+  }
+  await ensureArcNetwork(ethereum);
   const provider = getProvider();
   return provider.getSigner();
 }

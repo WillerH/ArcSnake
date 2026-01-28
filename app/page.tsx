@@ -1,20 +1,19 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Header } from "@/components/header"
 import { PlayTab } from "@/components/play-tab"
 import { MySnakesTab } from "@/components/my-snakes-tab"
 import { LeaderboardTab } from "@/components/leaderboard-tab"
 import { TrainingModeTab } from "@/components/training-mode-tab"
 import { type SnakeNFT } from "@/lib/snake-data"
-import { connectWallet, getEthereum } from "@/lib/arc-web3"
+import { useAccount } from "wagmi"
 
 type Tab = "play" | "snakes" | "leaderboard" | "training"
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("play")
-  const [walletAddress, setWalletAddress] = useState<string | null>(null)
-  const [isConnecting, setIsConnecting] = useState(false)
+  const { address, isConnected } = useAccount()
   const [ownedSnakes, setOwnedSnakes] = useState<SnakeNFT[]>([])
 
   const handlePurchaseSnake = (snake: SnakeNFT) => {
@@ -27,49 +26,9 @@ export default function Home() {
     )
   }
 
-  const handleConnectWallet = async () => {
-    setIsConnecting(true)
-    try {
-      const address = await connectWallet()
-      if (address) {
-        setWalletAddress(address)
-      }
-    } catch (error) {
-      console.error(error)
-      alert("Wallet connection failed. Please check MetaMask.")
-    } finally {
-      setIsConnecting(false)
-    }
-  }
-
-  useEffect(() => {
-    const ethereum = getEthereum()
-    if (!ethereum) return
-
-    const ethereumAny = ethereum as unknown as {
-      request: (args: { method: string }) => Promise<string[]>
-      on?: (event: string, handler: (accounts: string[]) => void) => void
-      removeListener?: (event: string, handler: (accounts: string[]) => void) => void
-    }
-
-    ethereumAny.request({ method: "eth_accounts" }).then((accounts) => {
-      setWalletAddress(accounts?.[0] || null)
-    })
-
-    const handleAccountsChanged = (accounts: string[]) => {
-      setWalletAddress(accounts?.[0] || null)
-    }
-
-    ethereumAny.on?.("accountsChanged", handleAccountsChanged)
-
-    return () => {
-      ethereumAny.removeListener?.("accountsChanged", handleAccountsChanged)
-    }
-  }, [])
-
   return (
     <div className="min-h-screen bg-background">
-      <Header walletAddress={walletAddress} isConnecting={isConnecting} onConnectWallet={handleConnectWallet} />
+      <Header walletAddress={address ?? null} />
 
       <main className="container mx-auto px-6 py-12 max-w-7xl">
         <div className="flex flex-wrap gap-3 mb-12 border-b border-border pb-1">
@@ -99,14 +58,14 @@ export default function Home() {
         {/* Tab Content */}
         {activeTab === "play" && (
           <PlayTab
-            isWalletConnected={Boolean(walletAddress)}
+            isWalletConnected={isConnected}
             ownedSnakes={ownedSnakes}
             onUpdateSnake={handleUpdateSnake}
           />
         )}
         {activeTab === "snakes" && (
           <MySnakesTab
-            isWalletConnected={Boolean(walletAddress)}
+            isWalletConnected={isConnected}
             ownedSnakes={ownedSnakes}
             onPurchaseSnake={handlePurchaseSnake}
           />
