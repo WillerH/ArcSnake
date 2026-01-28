@@ -18,6 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NEXT_PUBLIC_BASE_PATH: /ArcSnake
+      NEXT_PUBLIC_SNAKE_NFT_ADDRESS: ${{ vars.NEXT_PUBLIC_SNAKE_NFT_ADDRESS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
