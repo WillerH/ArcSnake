@@ -12,8 +12,6 @@ export const ARC_TESTNET = {
   blockExplorerUrls: ["https://testnet.arcscan.app"],
 };
 
-export const SNAKE_NFT_ADDRESS = process.env.NEXT_PUBLIC_SNAKE_NFT_ADDRESS ?? "";
-
 export const SNAKE_NFT_ABI = [
   "function buy(uint256 id, uint256 amount) payable",
   "function prices(uint256 id) view returns (uint256)",

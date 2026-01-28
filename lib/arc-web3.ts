@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
-import { ARC_TESTNET, SNAKE_NFT_ABI, SNAKE_NFT_ADDRESS } from "@/lib/arc-config";
+import { SNAKE_NFT_ADDRESS } from "@/config/contracts";
+import { ARC_TESTNET, SNAKE_NFT_ABI } from "@/lib/arc-config";
 
 export type EthereumProvider = {
   request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>;
