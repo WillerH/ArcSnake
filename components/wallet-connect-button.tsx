@@ -1,61 +1,76 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useAccount, useConnect } from "wagmi";
-import { WalletConnectErrorModal } from "@/components/wallet-connect-error-modal";
-import { normalizeWalletError, type WalletError } from "@/lib/wallet-errors";
+import { useEffect, useState } from "react"
+import { WalletConnectErrorModal } from "@/components/wallet-connect-error-modal"
+import type { WalletError } from "@/lib/wallet-errors"
 
-export function WalletConnectButton() {
-  const { isConnected } = useAccount();
-  const { error: connectError, reset: resetConnect } = useConnect();
-  const [error, setError] = useState<WalletError | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const prevErrorRef = useRef<unknown>(null);
+interface WalletConnectButtonProps {
+  isConnected: boolean
+  isConnecting: boolean
+  connectWallet: () => Promise<{ success: boolean; error: WalletError | null }>
+  disconnectWallet: () => void
+  connectionError: WalletError | null
+  clearError: () => void
+}
 
-  // Check for provider availability
-  const hasProvider = typeof window !== "undefined" && !!window.ethereum;
+export function WalletConnectButton({
+  isConnected,
+  isConnecting,
+  connectWallet,
+  disconnectWallet,
+  connectionError,
+  clearError,
+}: WalletConnectButtonProps) {
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    // Only show modal if error changed and is not null
-    if (connectError && connectError !== prevErrorRef.current) {
-      const normalized = normalizeWalletError(connectError);
-      setError(normalized);
-      setShowModal(true);
-      prevErrorRef.current = connectError;
-    } else if (isConnected) {
-      // Clear error when successfully connected
-      setError(null);
-      setShowModal(false);
-      prevErrorRef.current = null;
-    } else if (!hasProvider && !connectError) {
-      // If no provider and no error yet, don't show modal immediately
-      // RainbowKit will handle showing its own modal
+    if (connectionError) {
+      setShowModal(true)
     }
-  }, [connectError, isConnected, hasProvider]);
+  }, [connectionError])
 
-  const handleRetry = () => {
-    setShowModal(false);
-    setError(null);
-    resetConnect(); // Reset wagmi error state
-    // User can click ConnectButton again to retry
-  };
+  const handleConnectClick = async () => {
+    const result = await connectWallet()
+    if (!result.success && result.error) {
+      // Error will be handled via connectionError/normalizeWalletError
+      setShowModal(true)
+    }
+  }
+
+  const handleRetry = async () => {
+    clearError()
+    setShowModal(false)
+    await handleConnectClick()
+  }
 
   const handleClose = () => {
-    setShowModal(false);
-  };
+    setShowModal(false)
+  }
+
+  const renderLabel = () => {
+    if (isConnecting) return "Conectando..."
+    if (isConnected) return "Wallet conectada"
+    return "Connect wallet"
+  }
 
   return (
     <>
-      <ConnectButton showBalance={false} />
-      {showModal && error && (
+      <button
+        type="button"
+        onClick={isConnected ? disconnectWallet : handleConnectClick}
+        className="px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-semibold shadow hover:bg-primary/90 transition-colors"
+      >
+        {renderLabel()}
+      </button>
+
+      {showModal && connectionError && (
         <WalletConnectErrorModal
-          error={error}
+          error={connectionError}
           onRetry={handleRetry}
           onClose={handleClose}
           onSwitchWallet={handleRetry}
         />
       )}
     </>
-  );
+  )
 }

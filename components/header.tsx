@@ -2,12 +2,27 @@
 
 import { Wallet } from "lucide-react"
 import { WalletConnectButton } from "@/components/wallet-connect-button"
+import type { WalletError } from "@/lib/wallet-errors"
 
 interface HeaderProps {
   walletAddress: string | null
+  isConnected: boolean
+  isConnecting: boolean
+  connectWallet: () => Promise<{ success: boolean; error: WalletError | null }>
+  disconnectWallet: () => void
+  connectionError: WalletError | null
+  clearError: () => void
 }
 
-export function Header({ walletAddress }: HeaderProps) {
+export function Header({
+  walletAddress: _walletAddress, // reserved for future use (e.g., display)
+  isConnected,
+  isConnecting,
+  connectWallet,
+  disconnectWallet,
+  connectionError,
+  clearError,
+}: HeaderProps) {
   return (
     <header className="border-b border-border gradient-header backdrop-blur-md sticky top-0 z-50 shadow-xl">
       <div className="container mx-auto px-6 py-5 flex items-center justify-between max-w-7xl">
@@ -22,7 +37,14 @@ export function Header({ walletAddress }: HeaderProps) {
 
         <div className="flex items-center gap-3">
           <Wallet className="w-5 h-5 text-primary" />
-          <WalletConnectButton />
+          <WalletConnectButton
+            isConnected={isConnected}
+            isConnecting={isConnecting}
+            connectWallet={connectWallet}
+            disconnectWallet={disconnectWallet}
+            connectionError={connectionError}
+            clearError={clearError}
+          />
         </div>
       </div>
     </header>
