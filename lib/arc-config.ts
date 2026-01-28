@@ -15,5 +15,7 @@ export const ARC_TESTNET = {
 export const SNAKE_NFT_ABI = [
   "function buy(uint256 id, uint256 amount) payable",
   "function prices(uint256 id) view returns (uint256)",
+  "function balanceOf(address account, uint256 id) view returns (uint256)",
+  "function balanceOfBatch(address[] accounts, uint256[] ids) view returns (uint256[])",
 ];
 

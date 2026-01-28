@@ -1,7 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { Web3Providers } from "@/components/Web3Providers"
 
@@ -41,7 +40,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={`font-sans antialiased`}>
         <Web3Providers>{children}</Web3Providers>
-        <Analytics />
       </body>
     </html>
   )

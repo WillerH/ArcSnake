@@ -13,7 +13,10 @@ import Image from "next/image"
 interface MySnakesTabProps {
   isWalletConnected: boolean
   ownedSnakes: SnakeNFT[]
-  onPurchaseSnake: (snake: SnakeNFT) => void
+  onPurchaseSnake: (snake: SnakeNFT) => void | Promise<void>
+  isLoadingSnakes?: boolean
+  snakesLoadError?: string | null
+  onReloadSnakes?: () => void
 }
 
 const SNAKE_MAX_ENERGY: Record<string, number> = {
@@ -25,9 +28,25 @@ const SNAKE_MAX_ENERGY: Record<string, number> = {
 
 const isContractConfigured = Boolean(SNAKE_NFT_ADDRESS)
 
-export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }: MySnakesTabProps) {
+export function MySnakesTab({
+  isWalletConnected,
+  ownedSnakes,
+  onPurchaseSnake,
+  isLoadingSnakes = false,
+  snakesLoadError = null,
+  onReloadSnakes,
+}: MySnakesTabProps) {
   const [purchasingSnake, setPurchasingSnake] = React.useState<string | null>(null)
   const ownedTokenIds = React.useMemo(() => new Set(ownedSnakes.map((snake) => snake.tokenId)), [ownedSnakes])
+
+  React.useEffect(() => {
+    console.log("[MySnakesTab] Received ownedSnakes", {
+      count: ownedSnakes.length,
+      isLoadingSnakes,
+      hasError: !!snakesLoadError,
+      snakes: ownedSnakes.map((s) => ({ tokenId: s.tokenId, name: s.name, id: s.id })),
+    })
+  }, [ownedSnakes, isLoadingSnakes, snakesLoadError])
 
   const handlePurchase = async (snake: SnakeType) => {
     if (!isWalletConnected || !isContractConfigured) return
@@ -44,7 +63,7 @@ export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }:
         maxEnergy: maxEnergy,
         nextPlayTime: null,
       }
-      onPurchaseSnake(newSnake)
+      await onPurchaseSnake(newSnake)
       alert(`Successfully purchased ${snake.name} for ${snake.price} USDC! Your snake has full energy.`)
     } catch (error) {
       console.error(error)
@@ -60,6 +79,30 @@ export function MySnakesTab({ isWalletConnected, ownedSnakes, onPurchaseSnake }:
         <AlertCircle className="w-16 h-16 mx-auto mb-6 text-primary" />
         <h3 className="text-2xl font-bold mb-3 tracking-tight">Wallet Not Connected</h3>
         <p className="text-muted-foreground text-lg">Please connect your wallet to view your snake NFTs.</p>
+      </Card>
+    )
+  }
+
+  if (isLoadingSnakes) {
+    return (
+      <Card className="p-12 text-center border-border gradient-card glow-primary">
+        <h3 className="text-2xl font-bold mb-3 tracking-tight">Loading your snakes…</h3>
+        <p className="text-muted-foreground text-lg">Fetching your Snake NFTs from the blockchain.</p>
+      </Card>
+    )
+  }
+
+  if (snakesLoadError) {
+    return (
+      <Card className="p-12 text-center border-border gradient-card glow-primary">
+        <AlertCircle className="w-16 h-16 mx-auto mb-6 text-destructive" />
+        <h3 className="text-2xl font-bold mb-3 tracking-tight">Could not load snakes</h3>
+        <p className="text-muted-foreground text-lg mb-6">{snakesLoadError}</p>
+        {onReloadSnakes && (
+          <Button className="mx-auto" onClick={onReloadSnakes}>
+            Try again
+          </Button>
+        )}
       </Card>
     )
   }
