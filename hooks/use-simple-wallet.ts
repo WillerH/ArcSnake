@@ -45,6 +45,46 @@ export function useSimpleWallet() {
     setConnectionError(null)
   }, [])
 
+  // Check if wallet is already connected on mount
+  useEffect(() => {
+    const checkExistingConnection = async () => {
+      if (typeof window === "undefined" || !window.ethereum) return
+
+      try {
+        const accounts = (await window.ethereum.request({
+          method: "eth_accounts",
+        })) as string[]
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0])
+          console.log("[useSimpleWallet] Found existing connection", { address: accounts[0] })
+        }
+      } catch (err) {
+        console.error("[useSimpleWallet] Error checking existing connection", err)
+      }
+    }
+
+    checkExistingConnection()
+
+    // Listen for account changes
+    if (window.ethereum) {
+      const handleAccountsChanged = (accounts: string[]) => {
+        if (accounts && accounts.length > 0) {
+          setAddress(accounts[0])
+        } else {
+          setAddress(null)
+        }
+      }
+
+      window.ethereum.on("accountsChanged", handleAccountsChanged)
+
+      return () => {
+        if (window.ethereum) {
+          window.ethereum.removeListener("accountsChanged", handleAccountsChanged)
+        }
+      }
+    }
+  }, [])
+
   // Optional: log connection changes for debugging
   useEffect(() => {
     // eslint-disable-next-line no-console

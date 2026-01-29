@@ -29,7 +29,7 @@ export function WalletConnectErrorModal({
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <AlertCircle className="w-6 h-6 text-destructive" />
-            <DialogTitle className="text-xl">Problema ao conectar wallet</DialogTitle>
+            <DialogTitle className="text-xl">Wallet Connection Issue</DialogTitle>
           </div>
           <DialogDescription className="text-base pt-2">
             {error.friendlyMessage}
@@ -39,7 +39,7 @@ export function WalletConnectErrorModal({
         <div className="space-y-3 pt-4">
           {isInstall && (
             <div className="bg-muted/50 p-4 rounded-lg space-y-2">
-              <p className="text-sm font-medium">Instalar uma wallet:</p>
+              <p className="text-sm font-medium">Install a wallet:</p>
               <div className="flex flex-col gap-2">
                 <a
                   href="https://metamask.io/download/"
@@ -48,7 +48,7 @@ export function WalletConnectErrorModal({
                   className="flex items-center gap-2 text-sm text-primary hover:underline"
                 >
                   <Download className="w-4 h-4" />
-                  Instalar MetaMask
+                  Install MetaMask
                 </a>
                 <a
                   href="https://rabby.io/"
@@ -66,12 +66,12 @@ export function WalletConnectErrorModal({
           {isUnlock && (
             <div className="bg-muted/50 p-4 rounded-lg">
               <p className="text-sm">
-                <strong>Como desbloquear:</strong>
+                <strong>How to unlock:</strong>
               </p>
               <ol className="text-sm mt-2 space-y-1 list-decimal list-inside">
-                <li>Abra a extensão da sua wallet (MetaMask/Rabby)</li>
-                <li>Digite sua senha para desbloquear</li>
-                <li>Clique em "Tentar novamente" abaixo</li>
+                <li>Open your wallet extension (MetaMask/Rabby)</li>
+                <li>Enter your password to unlock</li>
+                <li>Click "Try again" below</li>
               </ol>
             </div>
           )}
@@ -92,7 +92,7 @@ export function WalletConnectErrorModal({
                 className="flex-1"
               >
                 <Wallet className="w-4 h-4 mr-2" />
-                Trocar wallet
+                Switch wallet
               </Button>
             )}
           </div>

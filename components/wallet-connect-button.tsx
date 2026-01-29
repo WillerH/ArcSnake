@@ -48,8 +48,8 @@ export function WalletConnectButton({
   }
 
   const renderLabel = () => {
-    if (isConnecting) return "Conectando..."
-    if (isConnected) return "Wallet conectada"
+    if (isConnecting) return "Connecting..."
+    if (isConnected) return "Wallet connected"
     return "Connect wallet"
   }
 

@@ -76,7 +76,7 @@ export default function Home() {
       })
       // IMPORTANT: don't lie to the user by showing "No Snakes Owned" on transient RPC failures.
       // Keep the previous list and show an error UI with a retry button instead.
-      setSnakesLoadError("Não foi possível carregar suas NFTs agora. Verifique a rede e tente novamente.")
+      setSnakesLoadError("Could not load your NFTs right now. Please check the network and try again.")
     } finally {
       setIsLoadingSnakes(false)
     }

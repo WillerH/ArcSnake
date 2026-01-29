@@ -20,7 +20,7 @@ export function normalizeWalletError(error: unknown): WalletError {
     return {
       code: 4001,
       message,
-      friendlyMessage: "Você cancelou a conexão.",
+      friendlyMessage: "You cancelled the connection.",
       action: "retry",
     };
   }
@@ -40,7 +40,7 @@ export function normalizeWalletError(error: unknown): WalletError {
     return {
       code: "LOCKED",
       message,
-      friendlyMessage: "Sua wallet está bloqueada. Desbloqueie e tente novamente.",
+      friendlyMessage: "Your wallet is locked. Unlock it and try again.",
       action: "unlock",
     };
   }
@@ -65,7 +65,7 @@ export function normalizeWalletError(error: unknown): WalletError {
   return {
     code: code || "UNKNOWN",
     message,
-    friendlyMessage: "Não foi possível conectar à wallet. Verifique se ela está desbloqueada e tente novamente.",
+    friendlyMessage: "Could not connect to wallet. Please make sure it is unlocked and try again.",
     action: "retry",
   };
 }
