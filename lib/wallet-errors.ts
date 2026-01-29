@@ -30,7 +30,7 @@ export function normalizeWalletError(error: unknown): WalletError {
     return {
       code: -32002,
       message,
-      friendlyMessage: "Já existe uma solicitação pendente na sua wallet. Abra a extensão e confirme.",
+      friendlyMessage: "There is already a pending request in your wallet. Open the extension and confirm.",
       action: "retry",
     };
   }
@@ -56,7 +56,7 @@ export function normalizeWalletError(error: unknown): WalletError {
     return {
       code: "NO_PROVIDER",
       message,
-      friendlyMessage: "Nenhuma wallet detectada. Instale MetaMask ou Rabby para continuar.",
+      friendlyMessage: "No wallet detected. Install MetaMask or Rabby to continue.",
       action: "install",
     };
   }

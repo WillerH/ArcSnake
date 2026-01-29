@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { normalizeWalletError, type WalletError } from "@/lib/wallet-errors"
 import { connectWallet as connectWalletArc } from "@/lib/arc-web3"
 
@@ -10,6 +10,7 @@ export function useSimpleWallet() {
   const [address, setAddress] = useState<string | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const [connectionError, setConnectionError] = useState<WalletError | null>(null)
+  const accountsChangedTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const isConnected = !!address
 
@@ -65,22 +66,44 @@ export function useSimpleWallet() {
 
     checkExistingConnection()
 
-    // Listen for account changes
+    // Listen for account changes (e.g. user switched account or disconnected in extension)
     if (window.ethereum) {
-      const handleAccountsChanged = (accounts: string[]) => {
+      const ethereum = window.ethereum
+
+      const handler = (accounts: string[]) => {
         if (accounts && accounts.length > 0) {
+          if (accountsChangedTimeoutRef.current) {
+            clearTimeout(accountsChangedTimeoutRef.current)
+            accountsChangedTimeoutRef.current = null
+          }
           setAddress(accounts[0])
-        } else {
-          setAddress(null)
+          return
         }
+        // Empty array can be spurious when multiple extensions (e.g. Backpack) interact with window.ethereum.
+        // Re-check eth_accounts after a short delay before disconnecting.
+        if (accountsChangedTimeoutRef.current) clearTimeout(accountsChangedTimeoutRef.current)
+        accountsChangedTimeoutRef.current = setTimeout(async () => {
+          accountsChangedTimeoutRef.current = null
+          try {
+            const current = (await ethereum.request({ method: "eth_accounts" })) as string[]
+            if (!current || current.length === 0) setAddress(null)
+            else setAddress(current[0])
+          } catch {
+            setAddress(null)
+          }
+        }, 200)
       }
 
-      window.ethereum.on("accountsChanged", handleAccountsChanged)
+      ethereum.on("accountsChanged", handler)
 
       return () => {
-        if (window.ethereum) {
-          window.ethereum.removeListener("accountsChanged", handleAccountsChanged)
+        if (accountsChangedTimeoutRef.current) {
+          clearTimeout(accountsChangedTimeoutRef.current)
+          accountsChangedTimeoutRef.current = null
         }
+        try {
+          ethereum.removeListener("accountsChanged", handler)
+        } catch (_) {}
       }
     }
   }, [])

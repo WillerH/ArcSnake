@@ -57,7 +57,7 @@ export function WalletConnectErrorModal({
                   className="flex items-center gap-2 text-sm text-primary hover:underline"
                 >
                   <Download className="w-4 h-4" />
-                  Instalar Rabby
+                  Install Rabby
                 </a>
               </div>
             </div>
@@ -83,7 +83,7 @@ export function WalletConnectErrorModal({
               variant="default"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
-              Tentar novamente
+              Try again
             </Button>
             {onSwitchWallet && (
               <Button
