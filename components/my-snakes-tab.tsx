@@ -83,30 +83,6 @@ export function MySnakesTab({
     )
   }
 
-  if (isLoadingSnakes) {
-    return (
-      <Card className="p-12 text-center border-border gradient-card glow-primary">
-        <h3 className="text-2xl font-bold mb-3 tracking-tight">Loading your snakes…</h3>
-        <p className="text-muted-foreground text-lg">Fetching your Snake NFTs from the blockchain.</p>
-      </Card>
-    )
-  }
-
-  if (snakesLoadError) {
-    return (
-      <Card className="p-12 text-center border-border gradient-card glow-primary">
-        <AlertCircle className="w-16 h-16 mx-auto mb-6 text-destructive" />
-        <h3 className="text-2xl font-bold mb-3 tracking-tight">Could not load snakes</h3>
-        <p className="text-muted-foreground text-lg mb-6">{snakesLoadError}</p>
-        {onReloadSnakes && (
-          <Button className="mx-auto" onClick={onReloadSnakes}>
-            Try again
-          </Button>
-        )}
-      </Card>
-    )
-  }
-
   if (!isContractConfigured) {
     return (
       <Card className="p-12 text-center border-border gradient-card glow-primary">
@@ -192,71 +168,108 @@ export function MySnakesTab({
       <div className="border-t border-border/50 pt-8">
         <h3 className="text-2xl font-bold mb-6 tracking-tight">Your Owned Snakes</h3>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {ownedSnakes.map((snake) => {
-            const xpProgress = snake.xpToNextLevel ? (snake.xp / snake.xpToNextLevel) * 100 : 0
+        {isLoadingSnakes && (
+          <Card className="p-8 mb-6 text-center border-border gradient-card glow-primary">
+            <h4 className="text-xl font-semibold mb-2 tracking-tight">Loading your snakes…</h4>
+            <p className="text-muted-foreground text-sm">Fetching your Snake NFTs from the blockchain.</p>
+          </Card>
+        )}
 
-            return (
-              <Card
-                key={snake.id}
-                className="p-5 border-border gradient-card hover:border-primary hover:-translate-y-2 glow-primary transition-all duration-300 cursor-pointer overflow-hidden"
-              >
-                <div className="relative w-full aspect-[3/4] rounded-xl mb-4 overflow-hidden border border-border/50 group">
-                  <Image
-                    src={snake.image || "/placeholder.svg"}
-                    alt={snake.name}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
+        {snakesLoadError && (
+          <Card className="p-8 mb-6 text-center border-border gradient-card glow-primary">
+            <AlertCircle className="w-10 h-10 mx-auto mb-4 text-destructive" />
+            <h4 className="text-xl font-semibold mb-2 tracking-tight">Could not load your snakes</h4>
+            <p className="text-muted-foreground text-sm mb-4">
+              {snakesLoadError}
+            </p>
+            {onReloadSnakes && (
+              <Button className="mx-auto" size="sm" onClick={onReloadSnakes}>
+                Try again
+              </Button>
+            )}
+            <p className="text-xs text-muted-foreground mt-3">
+              The marketplace above is still available. You can purchase new snakes even if your owned snakes list
+              could not be loaded.
+            </p>
+          </Card>
+        )}
 
-                <div className="space-y-3">
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <h3 className="text-lg font-bold tracking-tight">{snake.name}</h3>
-                      <span className={`text-sm font-bold ${snake.rarityColor}`}>{snake.rarity}</span>
-                    </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{snake.description}</p>
+        {!snakesLoadError && !isLoadingSnakes && ownedSnakes.length === 0 && (
+          <Card className="p-8 text-center border-border gradient-card glow-primary">
+            <h4 className="text-xl font-semibold mb-2 tracking-tight">No snakes owned yet</h4>
+            <p className="text-muted-foreground text-sm">
+              You don&apos;t own any snake NFTs yet. Use the marketplace above to purchase your first snake.
+            </p>
+          </Card>
+        )}
+
+        {ownedSnakes.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {ownedSnakes.map((snake) => {
+              const xpProgress = snake.xpToNextLevel ? (snake.xp / snake.xpToNextLevel) * 100 : 0
+
+              return (
+                <Card
+                  key={snake.id}
+                  className="p-5 border-border gradient-card hover:border-primary hover:-translate-y-2 glow-primary transition-all duration-300 cursor-pointer overflow-hidden"
+                >
+                  <div className="relative w-full aspect-[3/4] rounded-xl mb-4 overflow-hidden border border-border/50 group">
+                    <Image
+                      src={snake.image || "/placeholder.svg"}
+                      alt={snake.name}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="space-y-3">
                     <div>
-                      <span className="text-muted-foreground block text-xs">Level</span>
-                      <p className="font-bold">{snake.level}</p>
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-lg font-bold tracking-tight">{snake.name}</h3>
+                        <span className={`text-sm font-bold ${snake.rarityColor}`}>{snake.rarity}</span>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{snake.description}</p>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground block text-xs">Multiplier</span>
-                      <p className="font-bold text-primary">{snake.multiplier}x</p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block text-xs">Energy</span>
-                      <p className="font-bold">
-                        {snake.energy}/{snake.maxEnergy}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground block text-xs">XP</span>
-                      <p className="font-bold text-primary">
-                        {snake.xp}/{snake.xpToNextLevel}
-                      </p>
-                    </div>
-                  </div>
 
-                  <div>
-                    <Progress value={xpProgress} className="h-2" />
-                  </div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div>
+                        <span className="text-muted-foreground block text-xs">Level</span>
+                        <p className="font-bold">{snake.level}</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground block text-xs">Multiplier</span>
+                        <p className="font-bold text-primary">{snake.multiplier}x</p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground block text-xs">Energy</span>
+                        <p className="font-bold">
+                          {snake.energy}/{snake.maxEnergy}
+                        </p>
+                      </div>
+                      <div>
+                        <span className="text-muted-foreground block text-xs">XP</span>
+                        <p className="font-bold text-primary">
+                          {snake.xp}/{snake.xpToNextLevel}
+                        </p>
+                      </div>
+                    </div>
 
-                  <Button
-                    className="w-full bg-card/50 hover:bg-card border-border hover:border-primary transition-all duration-200 py-5 font-semibold text-sm"
-                    variant="outline"
-                  >
-                    View Details
-                  </Button>
-                </div>
-              </Card>
-            )
-          })}
-        </div>
+                    <div>
+                      <Progress value={xpProgress} className="h-2" />
+                    </div>
+
+                    <Button
+                      className="w-full bg-card/50 hover:bg-card border-border hover:border-primary transition-all duration-200 py-5 font-semibold text-sm"
+                      variant="outline"
+                    >
+                      View Details
+                    </Button>
+                  </div>
+                </Card>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )
