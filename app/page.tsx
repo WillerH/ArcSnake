@@ -7,13 +7,21 @@ import { MySnakesTab } from "@/components/my-snakes-tab"
 import { LeaderboardTab } from "@/components/leaderboard-tab"
 import { TrainingModeTab } from "@/components/training-mode-tab"
 import { type SnakeNFT } from "@/lib/snake-data"
-import { useAccount } from "wagmi"
+import { useWallet } from "@/components/ClientWeb3Providers"
 
 type Tab = "play" | "snakes" | "leaderboard" | "training"
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("play")
-  const { address, isConnected } = useAccount()
+  const {
+    address,
+    isConnected,
+    isConnecting,
+    connectWallet,
+    disconnectWallet,
+    connectionError,
+    clearError,
+  } = useWallet()
   const [ownedSnakes, setOwnedSnakes] = useState<SnakeNFT[]>([])
 
   const handlePurchaseSnake = (snake: SnakeNFT) => {
@@ -28,7 +36,15 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header walletAddress={address ?? null} />
+      <Header
+        walletAddress={address ?? null}
+        isConnected={isConnected}
+        isConnecting={isConnecting}
+        connectWallet={connectWallet}
+        disconnectWallet={disconnectWallet}
+        connectionError={connectionError}
+        clearError={clearError}
+      />
 
       <main className="container mx-auto px-6 py-12 max-w-7xl">
         <div className="flex flex-wrap gap-3 mb-12 border-b border-border pb-1">
