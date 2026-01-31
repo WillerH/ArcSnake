@@ -9,6 +9,7 @@ import { SNAKE_NFT_ADDRESS } from "@/config/contracts"
 import { AlertCircle } from "lucide-react"
 import React from "react"
 import Image from "next/image"
+import Image from "next/image"
 
 interface MySnakesTabProps {
   isWalletConnected: boolean
