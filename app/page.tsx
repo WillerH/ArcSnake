@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Header } from "@/components/header"
 import { PlayTab } from "@/components/play-tab"
 import { MySnakesTab } from "@/components/my-snakes-tab"
@@ -8,6 +8,7 @@ import { LeaderboardTab } from "@/components/leaderboard-tab"
 import { TrainingModeTab } from "@/components/training-mode-tab"
 import { type SnakeNFT } from "@/lib/snake-data"
 import { useWallet } from "@/components/ClientWeb3Providers"
+import { fetchMySnakes } from "@/lib/arc-web3"
 
 type Tab = "play" | "snakes" | "leaderboard" | "training"
 
@@ -23,6 +24,37 @@ export default function Home() {
     clearError,
   } = useWallet()
   const [ownedSnakes, setOwnedSnakes] = useState<SnakeNFT[]>([])
+  const [isLoadingSnakes, setIsLoadingSnakes] = useState(false)
+  const [snakesLoadError, setSnakesLoadError] = useState<string | null>(null)
+
+  const loadOwnedSnakes = useCallback(async () => {
+    if (!address) {
+      setOwnedSnakes([])
+      setSnakesLoadError(null)
+      return
+    }
+    setIsLoadingSnakes(true)
+    setSnakesLoadError(null)
+    try {
+      const snakes = await fetchMySnakes(address)
+      setOwnedSnakes(snakes)
+    } catch (e) {
+      const message = e instanceof Error ? e.message : "Failed to load snakes"
+      setSnakesLoadError(message)
+      setOwnedSnakes([])
+    } finally {
+      setIsLoadingSnakes(false)
+    }
+  }, [address])
+
+  useEffect(() => {
+    if (!address) {
+      setOwnedSnakes([])
+      setSnakesLoadError(null)
+      return
+    }
+    loadOwnedSnakes()
+  }, [address, loadOwnedSnakes])
 
   const handlePurchaseSnake = (snake: SnakeNFT) => {
     setOwnedSnakes((prev) => [...prev, snake])
@@ -84,6 +116,9 @@ export default function Home() {
             isWalletConnected={isConnected}
             ownedSnakes={ownedSnakes}
             onPurchaseSnake={handlePurchaseSnake}
+            isLoadingSnakes={isLoadingSnakes}
+            snakesLoadError={snakesLoadError}
+            onReloadSnakes={loadOwnedSnakes}
           />
         )}
         {activeTab === "leaderboard" && <LeaderboardTab />}
