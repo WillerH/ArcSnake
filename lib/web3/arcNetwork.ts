@@ -93,3 +93,11 @@ export async function ensureArcNetwork(ethereum: EIP1193Provider): Promise<void>
     }
   }
 }
+
+/**
+ * Reusable helper: ensures the provider is on Arc Testnet (switch or add then switch, max 1 cycle).
+ * Use in Connect Wallet and immediately before mint/purchase. EIP-1193 compatible.
+ */
+export async function ensureArcTestnet(provider: EIP1193Provider): Promise<void> {
+  return ensureArcNetwork(provider)
+}
