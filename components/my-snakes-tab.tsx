@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress"
 import { SNAKE_TYPES, type SnakeNFT, type SnakeType } from "@/lib/snake-data"
 import { buySnake } from "@/lib/arc-web3"
 import { SNAKE_NFT_ADDRESS } from "@/config/contracts"
+import { getPurchaseErrorMessage } from "@/lib/wallet-errors"
 import { AlertCircle } from "lucide-react"
 import React from "react"
 import Image from "next/image"
@@ -66,8 +67,9 @@ export function MySnakesTab({
       await onPurchaseSnake(newSnake)
       alert(`Successfully purchased ${snake.name} for ${snake.price} USDC! Your snake has full energy.`)
     } catch (error) {
-      console.error(error)
-      alert("Purchase failed. Please check your wallet and try again.")
+      console.error("Purchase error:", error)
+      const message = getPurchaseErrorMessage(error)
+      alert(message)
     } finally {
       setPurchasingSnake(null)
     }
