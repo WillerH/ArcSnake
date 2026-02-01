@@ -8,6 +8,14 @@ import { type SnakeNFT } from "@/lib/snake-data"
 import { Play, AlertCircle } from "lucide-react"
 import Image from "next/image"
 
+/** Imagens padronizadas para a aba Play (nome da cobra → path). */
+const PLAY_STANDARDIZED_IMAGES: Record<string, string> = {
+  Rattlesnake: "/images/rattlesnake_standardized.png",
+  "Coral Snake": "/images/coral_snake_standardized_371x237.png",
+  "King Cobra": "/images/king_cobra_standardized_371x237.png",
+  "Black Mamba": "/images/black_mamba_standardized_371x237.png",
+}
+
 interface PlayTabProps {
   isWalletConnected: boolean
   ownedSnakes: SnakeNFT[]
@@ -80,7 +88,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake }: PlayT
                 className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
               >
                 <Image
-                  src={snake.name === "Rattlesnake" ? "/images/rattlesnake_standardized.png" : snake.image}
+                  src={PLAY_STANDARDIZED_IMAGES[snake.name] ?? snake.image}
                   alt={snake.name}
                   width={288}
                   height={144}
