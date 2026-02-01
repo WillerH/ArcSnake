@@ -3,12 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { Card } from "@/components/ui/card"
 import { Trophy, Medal } from "lucide-react"
-import {
-  fetchLeaderboard,
-  formatLeaderboardAddress,
-  isGlobalLeaderboardConfigured,
-  type LeaderboardEntry,
-} from "@/lib/leaderboard-api"
+import { fetchLeaderboard, formatLeaderboardAddress, type LeaderboardEntry } from "@/lib/leaderboard-api"
 
 export function LeaderboardTab() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
@@ -38,14 +33,7 @@ export function LeaderboardTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
-        <p className="text-muted-foreground">
-          Top 100 players on Arc Testnet (scores from NFT games)
-          {!isGlobalLeaderboardConfigured() && (
-            <span className="block text-xs mt-1 text-amber-600 dark:text-amber-400">
-              Configure Supabase (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY) to show scores from all players.
-            </span>
-          )}
-        </p>
+        <p className="text-muted-foreground">Top 100 players on Arc Testnet</p>
       </div>
 
       <div className="flex gap-4 mb-6">
