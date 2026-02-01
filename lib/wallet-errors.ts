@@ -1,14 +1,25 @@
+import { ArcNetworkUserRejectedError } from "@/lib/web3/arcNetwork"
+
 /**
  * Normalize wallet connection errors for user-friendly messages.
  */
-
 export interface WalletError {
   code: string
   message: string
   userMessage: string
 }
 
+const ARC_NETWORK_REJECTED_MESSAGE =
+  "Você precisa estar na Arc Testnet para continuar."
+
 export function normalizeWalletError(error: unknown): WalletError {
+  if (error instanceof ArcNetworkUserRejectedError) {
+    return {
+      code: "4001",
+      message: error.message,
+      userMessage: ARC_NETWORK_REJECTED_MESSAGE,
+    }
+  }
   const err = error as { code?: string; message?: string }
   const code = err?.code ?? "UNKNOWN"
   const message = String(err?.message ?? error ?? "Unknown error")
@@ -38,7 +49,10 @@ export function getPurchaseErrorMessage(error: unknown): string {
   const code = err?.code
   const msg = String(err?.message ?? err?.reason ?? error).toLowerCase()
 
-  // Rejeitado pelo utilizador na MetaMask
+  // Rejeitado na troca/adição de rede (ensureArcNetwork) → mensagem amigável
+  if (error instanceof ArcNetworkUserRejectedError) {
+    return ARC_NETWORK_REJECTED_MESSAGE
+  }
   if (code === 4001 || code === "4001" || msg.includes("user rejected") || msg.includes("user denied")) {
     return "Transaction was rejected. Please approve the transaction in your wallet to complete the purchase."
   }
@@ -48,9 +62,9 @@ export function getPurchaseErrorMessage(error: unknown): string {
     return "Insufficient balance. Make sure you have enough USDC (or native token) on Arc Testnet to pay for this snake."
   }
 
-  // Rede errada
+  // Rede errada (após ensureArcNetwork: só chega aqui se usuário cancelou ou falha) → mensagem amigável
   if (msg.includes("network") || msg.includes("chain") || msg.includes("wrong chain")) {
-    return "Wrong network. Please switch to Arc Testnet in your wallet and try again."
+    return ARC_NETWORK_REJECTED_MESSAGE
   }
 
   // Revert do contrato (inclui reason se existir)

@@ -2,46 +2,17 @@ import { ethers } from "ethers";
 import { SNAKE_NFT_ADDRESS } from "@/config/contracts";
 import { ARC_TESTNET, SNAKE_NFT_ABI } from "@/lib/arc-config";
 import { SNAKE_TYPES, type SnakeNFT } from "@/lib/snake-data";
+import {
+  ensureArcNetwork,
+  getEthereum,
+  type EIP1193Provider,
+} from "@/lib/web3/arcNetwork";
 
-export type EthereumProvider = {
-  request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>;
-};
-
-export function getEthereum(): EthereumProvider | null {
-  if (typeof window === "undefined") return null;
-  return (window as Window & { ethereum?: EthereumProvider }).ethereum || null;
-}
+export type { EIP1193Provider };
+export { ensureArcNetwork, getEthereum };
 
 export function getContractAddress() {
   return SNAKE_NFT_ADDRESS;
-}
-
-export async function ensureArcNetwork(ethereum: EthereumProvider) {
-  try {
-    await ethereum.request({
-      method: "wallet_switchEthereumChain",
-      params: [{ chainId: ARC_TESTNET.chainHex }],
-    });
-  } catch (error) {
-    const err = error as { code?: number };
-    // 4902 = chain not added; add Arc Testnet (dados oficiais: docs.arc.network/arc/references/connect-to-arc)
-    if (err.code === 4902) {
-      await ethereum.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: ARC_TESTNET.chainHex,
-            chainName: ARC_TESTNET.chainName,
-            nativeCurrency: ARC_TESTNET.nativeCurrency,
-            rpcUrls: ARC_TESTNET.rpcUrls,
-            blockExplorerUrls: ARC_TESTNET.blockExplorerUrls,
-          },
-        ],
-      });
-    } else {
-      throw error;
-    }
-  }
 }
 
 /**

@@ -11,6 +11,14 @@ import {
   normalizeWalletError,
   type WalletError,
 } from "@/lib/wallet-errors"
+import {
+  ArcNetworkUserRejectedError,
+  ensureArcNetwork,
+  getEthereum,
+} from "@/lib/web3/arcNetwork"
+
+const ARC_NETWORK_REJECTED_MESSAGE =
+  "Você precisa estar na Arc Testnet para continuar."
 
 type WalletContextValue = {
   address: string | null
@@ -23,12 +31,6 @@ type WalletContextValue = {
 }
 
 const WalletContext = createContext<WalletContextValue | null>(null)
-
-function getEthereum() {
-  if (typeof window === "undefined") return null
-  return (window as { ethereum?: { request: (args: { method: string; params?: unknown[] }) => Promise<unknown> } })
-    .ethereum ?? null
-}
 
 export function ClientWeb3Providers({ children }: { children: React.ReactNode }) {
   const [address, setAddress] = useState<string | null>(null)
@@ -50,6 +52,7 @@ export function ClientWeb3Providers({ children }: { children: React.ReactNode })
     setIsConnecting(true)
     setConnectionError(null)
     try {
+      await ensureArcNetwork(ethereum)
       const accounts = (await ethereum.request({
         method: "eth_requestAccounts",
         params: [],
@@ -58,6 +61,15 @@ export function ClientWeb3Providers({ children }: { children: React.ReactNode })
       setAddress(acc ? String(acc) : null)
       return { success: !!acc, error: null }
     } catch (e) {
+      if (e instanceof ArcNetworkUserRejectedError) {
+        const err: WalletError = {
+          code: "4001",
+          message: e.message,
+          userMessage: ARC_NETWORK_REJECTED_MESSAGE,
+        }
+        setConnectionError(err)
+        return { success: false, error: err }
+      }
       const err = normalizeWalletError(e)
       setConnectionError(err)
       return { success: false, error: err }
@@ -81,18 +93,23 @@ export function ClientWeb3Providers({ children }: { children: React.ReactNode })
     ethereum.request({ method: "eth_accounts", params: [] }).then((accounts) => {
       onAccounts(accounts as string[])
     })
-    const handler = (accounts: unknown) => onAccounts(accounts)
+    const accountsHandler = (accounts: unknown) => onAccounts(accounts)
     type EthWithEvents = typeof ethereum & {
-      on?: (event: string, cb: (accounts: unknown) => void) => void
-      removeListener?: (event: string, cb: (accounts: unknown) => void) => void
+      on?: (event: string, cb: (...args: unknown[]) => void) => void
+      removeListener?: (event: string, cb: (...args: unknown[]) => void) => void
     }
     const eth = ethereum as EthWithEvents
+    const cleanup: (() => void)[] = []
     if (typeof eth.on === "function") {
-      eth.on("accountsChanged", handler)
-      return () => {
-        eth.removeListener?.("accountsChanged", handler)
+      eth.on("accountsChanged", accountsHandler)
+      cleanup.push(() => eth.removeListener?.("accountsChanged", accountsHandler))
+      const chainChangedHandler = () => {
+        window.location.reload()
       }
+      eth.on("chainChanged", chainChangedHandler)
+      cleanup.push(() => eth.removeListener?.("chainChanged", chainChangedHandler))
     }
+    return () => cleanup.forEach((fn) => fn())
   }, [])
 
   const value: WalletContextValue = {
