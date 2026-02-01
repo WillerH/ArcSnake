@@ -1,30 +1,51 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card } from "@/components/ui/card"
 import { Trophy, Medal } from "lucide-react"
-import { fetchLeaderboard, formatLeaderboardAddress, type LeaderboardEntry } from "@/lib/leaderboard-api"
+import {
+  fetchLeaderboard,
+  formatLeaderboardAddress,
+  isGlobalLeaderboardConfigured,
+  type LeaderboardEntry,
+} from "@/lib/leaderboard-api"
 
 export function LeaderboardTab() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    setEntries(fetchLeaderboard())
-    setIsLoading(false)
+  const load = useCallback(async () => {
+    setIsLoading(true)
+    try {
+      const data = await fetchLeaderboard()
+      setEntries(data)
+    } finally {
+      setIsLoading(false)
+    }
   }, [])
 
   useEffect(() => {
-    const onStorage = () => setEntries(fetchLeaderboard())
+    load()
+  }, [load])
+
+  useEffect(() => {
+    const onStorage = () => load()
     window.addEventListener("storage", onStorage)
     return () => window.removeEventListener("storage", onStorage)
-  }, [])
+  }, [load])
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
-        <p className="text-muted-foreground">Top players on Arc Testnet (scores from NFT games)</p>
+        <p className="text-muted-foreground">
+          Top 100 players on Arc Testnet (scores from NFT games)
+          {!isGlobalLeaderboardConfigured() && (
+            <span className="block text-xs mt-1 text-amber-600 dark:text-amber-400">
+              Configure Supabase (NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY) to show scores from all players.
+            </span>
+          )}
+        </p>
       </div>
 
       <div className="flex gap-4 mb-6">
