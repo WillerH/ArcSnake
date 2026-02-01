@@ -24,6 +24,7 @@ export async function ensureArcNetwork(ethereum: EthereumProvider) {
     });
   } catch (error) {
     const err = error as { code?: number };
+    // 4902 = chain not added; add Arc Testnet (dados oficiais: docs.arc.network/arc/references/connect-to-arc)
     if (err.code === 4902) {
       await ethereum.request({
         method: "wallet_addEthereumChain",
