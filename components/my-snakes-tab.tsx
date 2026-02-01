@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { SNAKE_TYPES, type SnakeNFT, type SnakeType } from "@/lib/snake-data"
-import { buySnake } from "@/lib/arc-web3"
+import { buySnake, switchToArcTestnet } from "@/lib/arc-web3"
 import { SNAKE_NFT_ADDRESS } from "@/config/contracts"
 import { getPurchaseErrorMessage } from "@/lib/wallet-errors"
 import { AlertCircle } from "lucide-react"
@@ -53,6 +53,7 @@ export function MySnakesTab({
     if (!isWalletConnected || !isContractConfigured) return
     setPurchasingSnake(snake.name)
     try {
+      await switchToArcTestnet()
       await buySnake(snake.tokenId, 1)
       const maxEnergy = SNAKE_MAX_ENERGY[snake.name] || 5
       const newSnake: SnakeNFT = {

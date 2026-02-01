@@ -43,6 +43,18 @@ export async function ensureArcNetwork(ethereum: EthereumProvider) {
   }
 }
 
+/**
+ * Pede à wallet para mudar para Arc Testnet (ou adiciona a rede se ainda não existir).
+ * Use antes de comprar ou quando a rede estiver errada.
+ */
+export async function switchToArcTestnet(): Promise<void> {
+  const ethereum = getEthereum();
+  if (!ethereum) {
+    throw new Error("MetaMask not detected");
+  }
+  await ensureArcNetwork(ethereum);
+}
+
 export async function connectWallet() {
   const ethereum = getEthereum();
   if (!ethereum) {
