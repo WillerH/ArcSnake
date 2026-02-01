@@ -9,9 +9,9 @@ export interface WalletError {
   userMessage: string
 }
 
-/** Shown when user cancels the network switch/add popup. */
+/** Shown when user cancels the network switch/add popup or when switch fails. */
 const ARC_NETWORK_REJECTED_MESSAGE =
-  "Você precisa estar na Arc Testnet para continuar."
+  "Você precisa estar na Arc Testnet para continuar. Clique em Comprar novamente e aprove a troca de rede na sua carteira."
 
 export function normalizeWalletError(error: unknown): WalletError {
   if (error instanceof ArcNetworkUserRejectedError) {

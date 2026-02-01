@@ -68,6 +68,8 @@ export function MySnakesTab({
       await onPurchaseSnake(newSnake)
       alert(`Successfully purchased ${snake.name} for ${snake.price} USDC! Your snake has full energy.`)
     } catch (error) {
+      // Most common: user cancelled the "Switch to Arc Testnet" or "Add network" pop-up (code 4001).
+      // Or: wallet returned a network/chain error without showing the pop-up (e.g. wrong provider).
       console.error("Purchase error:", error)
       const message = getPurchaseErrorMessage(error)
       alert(message)
