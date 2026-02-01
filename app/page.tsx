@@ -109,6 +109,7 @@ export default function Home() {
             isWalletConnected={isConnected}
             ownedSnakes={ownedSnakes}
             onUpdateSnake={handleUpdateSnake}
+            walletAddress={address ?? null}
           />
         )}
         {activeTab === "snakes" && (

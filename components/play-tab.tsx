@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { SnakeGame } from "@/components/snake-game"
 import { type SnakeNFT } from "@/lib/snake-data"
+import { submitScore } from "@/lib/leaderboard-api"
 import { Play, AlertCircle } from "lucide-react"
 import Image from "next/image"
 
@@ -20,15 +21,18 @@ interface PlayTabProps {
   isWalletConnected: boolean
   ownedSnakes: SnakeNFT[]
   onUpdateSnake: (snake: SnakeNFT) => void
+  walletAddress: string | null
 }
 
-export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake }: PlayTabProps) {
+export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletAddress }: PlayTabProps) {
   const [selectedSnake, setSelectedSnake] = useState<SnakeNFT | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const userSnakes = ownedSnakes; // Declare userSnakes variable
 
   const handleGameEnd = (finalScore: number) => {
     if (selectedSnake) {
+      if (walletAddress) {
+        submitScore(walletAddress, finalScore, selectedSnake.name)
+      }
       const updatedSnake: SnakeNFT = {
         ...selectedSnake,
         energy: Math.max(0, selectedSnake.energy - 1),
