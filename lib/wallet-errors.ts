@@ -10,7 +10,7 @@ export interface WalletError {
 }
 
 const ARC_NETWORK_REJECTED_MESSAGE =
-  "Você precisa estar na Arc Testnet para continuar."
+  "You need to be on Arc Testnet to continue."
 
 export function normalizeWalletError(error: unknown): WalletError {
   if (error instanceof ArcNetworkUserRejectedError) {
@@ -40,7 +40,7 @@ export function normalizeWalletError(error: unknown): WalletError {
 }
 
 /**
- * Extrai uma mensagem legível de erros de compra (tx rejeitada, saldo insuficiente, revert, etc.).
+ * Returns a user-friendly message for purchase errors (tx rejected, insufficient balance, revert, etc.).
  */
 export function getPurchaseErrorMessage(error: unknown): string {
   if (error == null) return "Purchase failed. Please try again."
@@ -49,7 +49,7 @@ export function getPurchaseErrorMessage(error: unknown): string {
   const code = err?.code
   const msg = String(err?.message ?? err?.reason ?? error).toLowerCase()
 
-  // Rejeitado na troca/adição de rede (ensureArcNetwork) → mensagem amigável
+  // User rejected network switch/add (ensureArcNetwork)
   if (error instanceof ArcNetworkUserRejectedError) {
     return ARC_NETWORK_REJECTED_MESSAGE
   }
@@ -57,24 +57,24 @@ export function getPurchaseErrorMessage(error: unknown): string {
     return "Transaction was rejected. Please approve the transaction in your wallet to complete the purchase."
   }
 
-  // Saldo insuficiente
+  // Insufficient balance
   if (msg.includes("insufficient") || msg.includes("insufficient funds") || msg.includes("exceeds balance")) {
     return "Insufficient balance. Make sure you have enough USDC (or native token) on Arc Testnet to pay for this snake."
   }
 
-  // Rede errada (após ensureArcNetwork: só chega aqui se usuário cancelou ou falha) → mensagem amigável
+  // Wrong network (after ensureArcNetwork: only reached if user cancelled or other failure)
   if (msg.includes("network") || msg.includes("chain") || msg.includes("wrong chain")) {
     return ARC_NETWORK_REJECTED_MESSAGE
   }
 
-  // Revert do contrato (inclui reason se existir)
+  // Contract revert (include reason if present)
   if (msg.includes("revert") || msg.includes("execution reverted")) {
     const reason = err?.reason ?? (typeof err?.data === "string" ? err.data : null)
     if (reason) return `Transaction reverted: ${reason}`
     return "Transaction reverted. The contract rejected the purchase (e.g. wrong price or conditions). Check you are on Arc Testnet and have enough balance."
   }
 
-  // Timeout / não minerada
+  // Timeout or replacement
   if (msg.includes("timeout") || msg.includes("replacement fee")) {
     return "Transaction is taking too long or was replaced. Please try again."
   }

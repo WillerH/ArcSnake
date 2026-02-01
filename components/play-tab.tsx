@@ -8,7 +8,7 @@ import { type SnakeNFT } from "@/lib/snake-data"
 import { Play, AlertCircle } from "lucide-react"
 import Image from "next/image"
 
-/** Imagens padronizadas para a aba Play (nome da cobra → path). */
+/** Standardized images for the Play tab (snake name → path). */
 const PLAY_STANDARDIZED_IMAGES: Record<string, string> = {
   Rattlesnake: "/images/rattlesnake_standardized.png",
   "Coral Snake": "/images/coral_snake_standardized_371x237.png",

@@ -1,13 +1,13 @@
 /**
- * Arc Testnet – helper reutilizável para detectar/trocar/adicionar rede na wallet (EIP-1193).
- * Dados oficiais: chainId 5042002, RPC, USDC, Explorer.
+ * Arc Testnet – reusable helper to detect/switch/add network in the wallet (EIP-1193).
+ * Official data: chainId 5042002, RPC, USDC, Explorer.
  * @see https://docs.arc.network/arc/references/connect-to-arc
  */
 
-/** Chain ID da Arc Testnet em hex (lowercase para comparação). */
+/** Arc Testnet chain ID in hex (lowercase for comparison). */
 export const ARC_CHAIN_ID_HEX = "0x4cef52" as const
 
-/** Config da rede para wallet_addEthereumChain (exatamente conforme spec). */
+/** Network config for wallet_addEthereumChain (exactly per spec). */
 export const ARC_NETWORK_PARAMS = {
   chainId: ARC_CHAIN_ID_HEX,
   chainName: "Arc Testnet",
@@ -16,14 +16,14 @@ export const ARC_NETWORK_PARAMS = {
   blockExplorerUrls: ["https://testnet.arcscan.app"],
 } as const
 
-/** Tipo mínimo EIP-1193: request + eventos opcionais. */
+/** Minimal EIP-1193 type: request + optional events. */
 export interface EIP1193Provider {
   request: (args: { method: string; params?: unknown[] | object }) => Promise<unknown>
   on?: (event: string, callback: (...args: unknown[]) => void) => void
   removeListener?: (event: string, callback: (...args: unknown[]) => void) => void
 }
 
-/** Erro quando o usuário rejeita a troca/adição de rede (code 4001). */
+/** Error when the user rejects the network switch/add (code 4001). */
 export class ArcNetworkUserRejectedError extends Error {
   readonly code = 4001
   constructor() {
@@ -33,7 +33,7 @@ export class ArcNetworkUserRejectedError extends Error {
 }
 
 /**
- * Retorna window.ethereum com type guard para EIP1193.
+ * Returns window.ethereum with type guard for EIP-1193.
  */
 export function getEthereum(): EIP1193Provider | null {
   if (typeof window === "undefined") return null
@@ -43,7 +43,7 @@ export function getEthereum(): EIP1193Provider | null {
 }
 
 /**
- * Verifica se o chainId (hex) é Arc Testnet (normaliza para comparação).
+ * Returns true if chainId (hex) is Arc Testnet (normalized for comparison).
  */
 export function isArcNetwork(chainIdHex: string | undefined): boolean {
   if (!chainIdHex) return false
@@ -52,10 +52,10 @@ export function isArcNetwork(chainIdHex: string | undefined): boolean {
 }
 
 /**
- * Garante que a wallet está na Arc Testnet: troca se necessário ou adiciona e troca (máx. 1 ciclo).
- * - Chama eth_chainId; se já for Arc, resolve.
- * - Senão tenta wallet_switchEthereumChain; se 4902 (rede não adicionada), chama wallet_addEthereumChain e depois wallet_switchEthereumChain de novo.
- * - Em 4001 (user rejected) lança ArcNetworkUserRejectedError para mensagem amigável.
+ * Ensures the wallet is on Arc Testnet: switches if needed, or adds and switches (max 1 cycle).
+ * - Calls eth_chainId; if already Arc, resolves.
+ * - Otherwise tries wallet_switchEthereumChain; if 4902 (chain not added), calls wallet_addEthereumChain then wallet_switchEthereumChain again.
+ * - On 4001 (user rejected) throws ArcNetworkUserRejectedError for a friendly message.
  */
 export async function ensureArcNetwork(ethereum: EIP1193Provider): Promise<void> {
   const currentChainId = (await ethereum.request({ method: "eth_chainId" })) as string | undefined

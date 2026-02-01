@@ -18,7 +18,7 @@ import {
 } from "@/lib/web3/arcNetwork"
 
 const ARC_NETWORK_REJECTED_MESSAGE =
-  "Você precisa estar na Arc Testnet para continuar."
+  "You need to be on Arc Testnet to continue."
 
 type WalletContextValue = {
   address: string | null
