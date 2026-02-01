@@ -7,6 +7,9 @@
 /** Arc Testnet chain ID in hex (lowercase for comparison). */
 export const ARC_CHAIN_ID_HEX = "0x4cef52" as const
 
+/** Arc Testnet chain ID as decimal bigint (ethers v6 getNetwork().chainId). */
+export const ARC_CHAIN_ID_DECIMAL = 5042002n as const
+
 /** Network config for wallet_addEthereumChain (exactly per spec). */
 export const ARC_NETWORK_PARAMS = {
   chainId: ARC_CHAIN_ID_HEX,

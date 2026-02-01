@@ -3,6 +3,7 @@ import { SNAKE_NFT_ADDRESS } from "@/config/contracts";
 import { ARC_TESTNET, SNAKE_NFT_ABI } from "@/lib/arc-config";
 import { SNAKE_TYPES, type SnakeNFT } from "@/lib/snake-data";
 import {
+  ARC_CHAIN_ID_DECIMAL,
   ensureArcNetwork,
   getEthereum,
   type EIP1193Provider,
@@ -37,6 +38,7 @@ export async function connectWallet() {
   return accounts?.[0] || null;
 }
 
+/** Creates a new BrowserProvider each time so that after ensureArcNetwork the wallet state is reflected (ethers v6). */
 export function getProvider() {
   const ethereum = getEthereum();
   if (!ethereum) {
@@ -45,6 +47,7 @@ export function getProvider() {
   return new ethers.BrowserProvider(ethereum);
 }
 
+/** Ensures Arc Testnet, then creates a fresh provider and signer (no stale provider after switch). */
 export async function getSigner() {
   const ethereum = getEthereum();
   if (!ethereum) {
@@ -115,12 +118,12 @@ export async function fetchMySnakes(ownerAddress: string): Promise<SnakeNFT[]> {
   try {
     const provider = getRpcProvider();
     const network = await provider.getNetwork();
+    const chainIdMatches = network.chainId === ARC_CHAIN_ID_DECIMAL;
     console.log("[fetchMySnakes] Network info", {
-      chainId: Number(network.chainId),
+      chainId: network.chainId.toString(),
       chainIdHex: network.chainId.toString(16),
-      expectedChainId: ARC_TESTNET.chainId,
-      expectedChainIdHex: ARC_TESTNET.chainHex,
-      chainIdMatches: Number(network.chainId) === ARC_TESTNET.chainId,
+      expectedChainId: ARC_CHAIN_ID_DECIMAL.toString(),
+      chainIdMatches,
     });
 
     const contract = await getReadOnlySnakeContract();
@@ -199,6 +202,11 @@ export async function buySnake(id: number, amount: number) {
   if (amount <= 0) {
     throw new Error("Amount must be greater than zero");
   }
+  const ethereum = getEthereum();
+  if (!ethereum) {
+    throw new Error("MetaMask not detected");
+  }
+  await ensureArcNetwork(ethereum);
   const contract = await getSnakeContract();
   const price = (await contract.prices(id)) as bigint;
   const totalPrice = price * BigInt(amount);

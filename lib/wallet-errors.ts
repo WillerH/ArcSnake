@@ -63,7 +63,7 @@ export function getPurchaseErrorMessage(error: unknown): string {
     return "Insufficient balance. Make sure you have enough USDC (or native token) on Arc Testnet to pay for this snake."
   }
 
-  // Wrong network (after ensureArcNetwork: only reached if user cancelled or other failure)
+  // Network/chain error (user cancelled switch or switch failed); show friendly message only
   if (msg.includes("network") || msg.includes("chain") || msg.includes("wrong chain")) {
     return ARC_NETWORK_REJECTED_MESSAGE
   }
