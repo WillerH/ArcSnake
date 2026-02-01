@@ -80,7 +80,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake }: PlayT
                 className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
               >
                 <Image
-                  src={(snake.name === "Rattlesnake" || snake.tokenId === 0) ? "/images/rattlesnake_standardized.png" : snake.image}
+                  src={snake.name === "Rattlesnake" ? "/images/rattlesnake_standardized.png" : snake.image}
                   alt={snake.name}
                   width={288}
                   height={144}
