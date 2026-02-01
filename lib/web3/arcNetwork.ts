@@ -70,11 +70,20 @@ export async function ensureArcNetwork(ethereum: EIP1193Provider): Promise<void>
       params: [{ chainId: ARC_CHAIN_ID_HEX }],
     })
   } catch (error) {
-    const err = error as { code?: number }
-    if (err.code === 4001) {
+    const err = error as { code?: number; message?: string }
+    const code = err.code
+    const msg = String(err?.message ?? "").toLowerCase()
+    if (code === 4001) {
       throw new ArcNetworkUserRejectedError()
     }
-    if (err.code === 4902) {
+    const chainNotAdded =
+      code === 4902 ||
+      code === -32603 ||
+      msg.includes("unrecognized chain") ||
+      msg.includes("unknown chain") ||
+      msg.includes("chain not added") ||
+      msg.includes("network not added")
+    if (chainNotAdded) {
       await ethereum.request({
         method: "wallet_addEthereumChain",
         params: [ARC_NETWORK_PARAMS],

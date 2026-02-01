@@ -21,15 +21,16 @@ export function normalizeWalletError(error: unknown): WalletError {
       userMessage: ARC_NETWORK_REJECTED_MESSAGE,
     }
   }
-  const err = error as { code?: string; message?: string }
-  const code = err?.code ?? "UNKNOWN"
+  const err = error as { code?: string | number; message?: string }
+  const code = err?.code != null ? String(err.code) : "UNKNOWN"
   const message = String(err?.message ?? error ?? "Unknown error")
 
   const userMessages: Record<string, string> = {
     "4001": "Connection was rejected",
     "4100": "Please unlock your wallet",
     "4200": "Wallet not found. Install MetaMask or Rabby.",
-    "-32603": "Request failed. Try again or switch wallet.",
+    "-32603":
+      "Connection failed. Add Arc Testnet in your wallet (Settings → Networks → Add network) and try again, or try another wallet.",
     UNKNOWN: "Something went wrong. Try again.",
   }
 
