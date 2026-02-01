@@ -77,9 +77,16 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake }: PlayT
               }`}
             >
               <div
-                className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center text-7xl ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
+                className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
               >
-                {snake.emoji}
+                <Image
+                  src={snake.name === "Rattlesnake" ? "/images/rattlesnake_standardized.png" : snake.image}
+                  alt={snake.name}
+                  width={288}
+                  height={144}
+                  className="w-full h-full object-cover object-center"
+                  unoptimized
+                />
               </div>
 
               <h3 className="text-2xl font-bold mb-2 tracking-tight">{snake.name}</h3>
