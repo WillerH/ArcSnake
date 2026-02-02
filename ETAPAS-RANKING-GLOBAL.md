@@ -75,3 +75,46 @@ Para o site publicado usar o ranking global:
 | D | GitHub repo | Settings → Actions → Variables: adicionar as duas variáveis |
 
 Depois de B, o ranking no Supabase passa a mostrar **todas** as carteiras. Depois de D, o site em produção também usa esse ranking global.
+
+---
+
+## Diagnóstico no site
+
+No separador **Leaderboard** o site mostra:
+
+- **Source: Supabase (global)** – está a usar o ranking do Supabase (todas as carteiras).
+- **Source: local storage** – está a usar só dados locais (ranking global não está ativo). Em produção, define as variáveis no GitHub (etapa D).
+- **Mensagem de erro** – o Supabase respondeu com erro (ex.: RLS). Executa o SQL da etapa B no Supabase.
+
+Usa o botão **Refresh** para voltar a carregar o ranking.
+-- Corrige o leaderboard para mostrar TODAS as carteiras publicamente.
+-- Se o ranking só mostra a tua carteira, executa isto no Supabase (SQL Editor).
+-- Isto garante que qualquer pessoa (anon) pode LER todas as linhas da tabela leaderboard.
+
+-- 1. Remover políticas que possam restringir a leitura
+DROP POLICY IF EXISTS "Leaderboard is publicly readable" ON public.leaderboard;
+DROP POLICY IF EXISTS "Anyone can upsert leaderboard" ON public.leaderboard;
+DROP POLICY IF EXISTS "Anyone can update leaderboard" ON public.leaderboard;
+
+-- 2. Leitura pública: anon e authenticated veem TODAS as linhas (ranking global)
+CREATE POLICY "Leaderboard is publicly readable"
+  ON public.leaderboard
+  FOR SELECT
+  TO anon, authenticated
+  USING (true);
+
+-- 3. Inserir: qualquer um pode inserir (submeter score)
+CREATE POLICY "Anyone can upsert leaderboard"
+  ON public.leaderboard
+  FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
+
+-- 4. Atualizar: qualquer um pode atualizar (atualizar melhor score)
+CREATE POLICY "Anyone can update leaderboard"
+  ON public.leaderboard
+  FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);
+

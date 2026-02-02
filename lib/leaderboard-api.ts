@@ -87,12 +87,18 @@ function saveEntries(entries: LeaderboardEntry[]) {
   }
 }
 
+export type FetchLeaderboardResult = {
+  entries: LeaderboardEntry[]
+  source: "supabase" | "local"
+  error?: string
+}
+
 /**
  * Devolve o leaderboard: TODAS as carteiras (ranking público), ordenadas por score (desc), até TOP_N.
  * Não filtra por carteira conectada — quem abre o site vê o ranking global.
- * Com Supabase = ranking global. Sem Supabase = só dados do localStorage.
+ * Inclui source (supabase | local) e error para diagnóstico.
  */
-export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
+export async function fetchLeaderboard(): Promise<FetchLeaderboardResult> {
   const supabase = getSupabaseClient()
   if (supabase) {
     try {
@@ -103,21 +109,23 @@ export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
         .limit(TOP_N)
       if (error) {
         console.warn("[leaderboard] fetchLeaderboard error:", error)
-        return []
+        return { entries: [], source: "supabase", error: error.message }
       }
-      if (!data || !Array.isArray(data)) return []
+      if (!data || !Array.isArray(data)) {
+        return { entries: [], source: "supabase" }
+      }
       const mapped = data.map((row: { address: string; score: number; snake: string; updated_at: string }) => ({
         address: row.address,
         score: Number(row.score),
         snake: row.snake ?? "",
         timestamp: row.updated_at ? new Date(row.updated_at).getTime() : 0,
       }))
-      // Ensure numeric sort (desc) in case backend returns different order
       mapped.sort((a, b) => b.score - a.score)
-      return mapped.slice(0, TOP_N)
+      return { entries: mapped.slice(0, TOP_N), source: "supabase" }
     } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e)
       console.warn("[leaderboard] fetchLeaderboard error:", e)
-      return []
+      return { entries: [], source: "supabase", error: msg }
     }
   }
   const entries = loadEntries()
@@ -127,9 +135,10 @@ export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
     const current = byAddress.get(key)
     if (!current || current.score < e.score) byAddress.set(key, e)
   }
-  return Array.from(byAddress.values())
+  const list = Array.from(byAddress.values())
     .sort((a, b) => b.score - a.score)
     .slice(0, TOP_N)
+  return { entries: list, source: "local" }
 }
 
 export function formatLeaderboardAddress(address: string): string {

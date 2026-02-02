@@ -2,19 +2,25 @@
 
 import { useState, useEffect, useCallback } from "react"
 import { Card } from "@/components/ui/card"
-import { Trophy, Medal } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Trophy, Medal, RefreshCw, AlertCircle } from "lucide-react"
 import { fetchLeaderboard, formatLeaderboardAddress, isGlobalLeaderboardConfigured, type LeaderboardEntry } from "@/lib/leaderboard-api"
 
 export function LeaderboardTab() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
+  const [source, setSource] = useState<"supabase" | "local">("local")
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const isGlobal = isGlobalLeaderboardConfigured()
 
   const load = useCallback(async () => {
     setIsLoading(true)
+    setLoadError(null)
     try {
-      const data = await fetchLeaderboard()
-      setEntries(data)
+      const result = await fetchLeaderboard()
+      setEntries(result.entries)
+      setSource(result.source)
+      if (result.error) setLoadError(result.error)
     } finally {
       setIsLoading(false)
     }
@@ -32,14 +38,32 @@ export function LeaderboardTab() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
-        <p className="text-muted-foreground">
-          {isGlobal
-            ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet). Scores are saved online."
-            : "Local ranking – scores are saved only on this device. Set NEXT_PUBLIC_SUPABASE_* in .env.local and rebuild for global ranking."}
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
+          <p className="text-muted-foreground">
+            {isGlobal
+              ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet). Scores are saved online."
+              : "Local ranking – scores are saved only on this device. Set NEXT_PUBLIC_SUPABASE_* in .env.local and rebuild for global ranking."}
+          </p>
+          {!isLoading && (
+            <p className="text-sm text-muted-foreground mt-1">
+              Source: {source === "supabase" ? "Supabase (global)" : "local storage"} · {entries.length} player{entries.length !== 1 ? "s" : ""}
+            </p>
+          )}
+        </div>
+        <Button variant="outline" size="sm" onClick={load} disabled={isLoading} className="shrink-0">
+          <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+          Refresh
+        </Button>
       </div>
+
+      {loadError && (
+        <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <AlertCircle className="w-5 h-5 shrink-0" />
+          <span>Failed to load global ranking: {loadError}. Check Supabase RLS (run supabase-fix-rls-public-read.sql) and connection.</span>
+        </div>
+      )}
 
       <Card className="overflow-hidden border-border/50 bg-card/50">
         <div className="overflow-x-auto">
