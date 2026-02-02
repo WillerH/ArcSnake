@@ -105,9 +105,6 @@ export function MySnakesTab({
       <div>
         <h2 className="text-3xl font-bold mb-3 tracking-tight">My Snake Collection</h2>
         <p className="text-muted-foreground text-lg mb-2">Your NFT snakes and their progression</p>
-        <p className="text-sm text-accent font-medium flex items-center gap-2">
-          XP progression will be stored on-chain in future versions
-        </p>
       </div>
 
       <div className="space-y-6">

@@ -33,14 +33,7 @@ export function LeaderboardTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
-        <p className="text-muted-foreground">Top 100 players on Arc Testnet</p>
-      </div>
-
-      <div className="flex gap-4 mb-6">
-        <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-medium">Daily</button>
-        <button className="px-6 py-2 bg-muted text-muted-foreground rounded-lg font-medium hover:bg-muted/80">
-          Weekly
-        </button>
+        <p className="text-muted-foreground">Global ranking – top 100 players on Arc Testnet (best score per wallet)</p>
       </div>
 
       <Card className="overflow-hidden border-border/50 bg-card/50">
