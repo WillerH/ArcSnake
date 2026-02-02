@@ -1,9 +1,9 @@
 /**
  * Leaderboard global: pontos de todos os jogadores que compraram NFT e jogaram.
- * Usa Supabase quando configurado (top 100); fallback localStorage (só visível localmente).
+ * Usa Supabase quando configurado (top 1000); fallback localStorage (só visível localmente).
  */
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js"
+import { getSupabaseClient } from "@/lib/supabase"
 
 export interface LeaderboardEntry {
   address: string
@@ -14,27 +14,10 @@ export interface LeaderboardEntry {
 
 const LEADERBOARD_STORAGE_KEY = "arcsnake_leaderboard_v1"
 const LEADERBOARD_TABLE = "leaderboard"
-const TOP_N = 100
+/** Máximo de carteiras no ranking global (todas que jogaram, ordenadas por melhor score). */
+const TOP_N = 1000
 
-function getSupabaseClient(): SupabaseClient | null {
-  if (typeof window === "undefined") return null
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  if (!url || !anonKey) return null
-  try {
-    return createClient(url, anonKey)
-  } catch {
-    return null
-  }
-}
-
-export function isGlobalLeaderboardConfigured(): boolean {
-  return Boolean(
-    typeof window !== "undefined" &&
-      process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  )
-}
+export { isSupabaseConfigured as isGlobalLeaderboardConfigured } from "@/lib/supabase"
 
 /**
  * Regista a pontuação de uma partida (jogador com NFT, fim de jogo).
@@ -105,7 +88,8 @@ function saveEntries(entries: LeaderboardEntry[]) {
 }
 
 /**
- * Devolve o leaderboard: top 100 por score (Supabase) ou dados locais se não configurado.
+ * Devolve o leaderboard: todas as carteiras que jogaram (melhor score por wallet), ordenadas por score (desc), até TOP_N.
+ * Com Supabase = ranking global. Sem Supabase = só dados do localStorage (uma carteira).
  */
 export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
   const supabase = getSupabaseClient()
@@ -121,12 +105,15 @@ export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
         return []
       }
       if (!data || !Array.isArray(data)) return []
-      return data.map((row: { address: string; score: number; snake: string; updated_at: string }) => ({
+      const mapped = data.map((row: { address: string; score: number; snake: string; updated_at: string }) => ({
         address: row.address,
         score: Number(row.score),
         snake: row.snake ?? "",
-        timestamp: new Date(row.updated_at).getTime(),
+        timestamp: row.updated_at ? new Date(row.updated_at).getTime() : 0,
       }))
+      // Ensure numeric sort (desc) in case backend returns different order
+      mapped.sort((a, b) => b.score - a.score)
+      return mapped.slice(0, TOP_N)
     } catch (e) {
       console.warn("[leaderboard] fetchLeaderboard error:", e)
       return []

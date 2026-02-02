@@ -3,11 +3,12 @@
 import { useState, useEffect, useCallback } from "react"
 import { Card } from "@/components/ui/card"
 import { Trophy, Medal } from "lucide-react"
-import { fetchLeaderboard, formatLeaderboardAddress, type LeaderboardEntry } from "@/lib/leaderboard-api"
+import { fetchLeaderboard, formatLeaderboardAddress, isGlobalLeaderboardConfigured, type LeaderboardEntry } from "@/lib/leaderboard-api"
 
 export function LeaderboardTab() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const isGlobal = isGlobalLeaderboardConfigured()
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -33,7 +34,11 @@ export function LeaderboardTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
-        <p className="text-muted-foreground">Global ranking – top 100 players on Arc Testnet (best score per wallet)</p>
+        <p className="text-muted-foreground">
+          {isGlobal
+            ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet). Scores are saved online."
+            : "Local ranking – scores are saved only on this device. Set NEXT_PUBLIC_SUPABASE_* in .env.local and rebuild for global ranking."}
+        </p>
       </div>
 
       <Card className="overflow-hidden border-border/50 bg-card/50">

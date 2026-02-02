@@ -31,7 +31,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
   const handleGameEnd = (finalScore: number) => {
     if (selectedSnake) {
       if (walletAddress) {
-        submitScore(walletAddress, finalScore, selectedSnake.name)
+        void submitScore(walletAddress, finalScore, selectedSnake.name)
       }
       const updatedSnake: SnakeNFT = {
         ...selectedSnake,

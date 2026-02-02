@@ -15,7 +15,7 @@ interface HeaderProps {
 }
 
 export function Header({
-  walletAddress: _walletAddress, // reserved for future use (e.g., display)
+  walletAddress: _walletAddress,
   isConnected,
   isConnecting,
   connectWallet,
