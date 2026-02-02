@@ -88,8 +88,9 @@ function saveEntries(entries: LeaderboardEntry[]) {
 }
 
 /**
- * Devolve o leaderboard: todas as carteiras que jogaram (melhor score por wallet), ordenadas por score (desc), até TOP_N.
- * Com Supabase = ranking global. Sem Supabase = só dados do localStorage (uma carteira).
+ * Devolve o leaderboard: TODAS as carteiras (ranking público), ordenadas por score (desc), até TOP_N.
+ * Não filtra por carteira conectada — quem abre o site vê o ranking global.
+ * Com Supabase = ranking global. Sem Supabase = só dados do localStorage.
  */
 export async function fetchLeaderboard(): Promise<LeaderboardEntry[]> {
   const supabase = getSupabaseClient()

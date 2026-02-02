@@ -40,7 +40,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 3. Guarde o ficheiro e reinicie o servidor de desenvolvimento (`npm run dev`) se estiver a correr.
 
-**Produção (deploy estático):** Para o ranking ser global no site publicado, as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` têm de existir **no momento do build**. Por exemplo, no GitHub Actions defina-as como secrets e use-as no passo de build; caso contrário o site em produção usará apenas ranking local (localStorage).
+**Produção (GitHub Pages):** O workflow de deploy já usa as variáveis `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Para o ranking global em produção:
+
+1. No repositório GitHub: **Settings** → **Secrets and variables** → **Actions** → **Variables**.
+2. Crie duas variáveis (não secrets): **`NEXT_PUBLIC_SUPABASE_URL`** e **`NEXT_PUBLIC_SUPABASE_ANON_KEY`** com os mesmos valores do teu projeto Supabase (Project URL e anon public).
+3. No próximo push para `main`, o build usará essas variáveis e o site em produção mostrará o ranking global.
 
 ---
 
@@ -64,3 +68,13 @@ Se correr sem erros, a tabela `leaderboard` e as políticas RLS ficam criadas e 
 | Supabase SQL Editor | Executar o SQL de `supabase-leaderboard-schema.sql` |
 
 Depois disto, o leaderboard no site usa esse projeto Supabase e mostra todas as carteiras no ranking.
+
+---
+
+## Se o ranking só mostrar a tua carteira
+
+O ranking é **público**: deve listar **todas** as carteiras que já submeteram score, não só a conectada. Se só aparece a tua:
+
+1. **Políticas RLS no Supabase** – O anon tem de poder ler **todas** as linhas. No Supabase, abre **SQL Editor**, cria uma nova query e executa **todo** o conteúdo do ficheiro **`supabase-fix-rls-public-read.sql`** do projeto. Isto recria as políticas para leitura pública (SELECT com `USING (true)` para `anon` e `authenticated`).
+
+2. **Variáveis no build de produção** – Se o site em produção (ex.: GitHub Pages) foi construído **sem** `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`, o site usa apenas localStorage e só vê dados deste dispositivo. Garante que o build de produção tem essas variáveis definidas (ex.: secrets no GitHub Actions).
