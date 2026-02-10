@@ -36,9 +36,9 @@ export default function AboutPage() {
       <main className="container mx-auto px-6 py-12 max-w-4xl space-y-8">
         {/* About Arc Snake */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold mb-4 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
             About Arc Snake
-          </h3>
+          </h2>
           <p className="text-muted-foreground leading-relaxed">
             Arc Snake is an experimental Web3 game inspired by the classic Snake experience.
             It&apos;s an independent and experimental project, built for entertainment, learning,
