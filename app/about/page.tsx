@@ -33,21 +33,16 @@ export default function AboutPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-6 py-12 max-w-4xl space-y-8">
+      <main className="container mx-auto px-6 py-12 max-w-4xl space-y-6">
         {/* About Arc Snake */}
-        <div>
-          <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-            About Arc Snake
-          </h2>
-        </div>
-
         <Card className="p-8 border-border/50 gradient-card">
-          <p className="text-lg text-muted-foreground leading-relaxed">
+          <h3 className="text-2xl font-bold mb-3 tracking-tight">About Arc Snake</h3>
+          <p className="text-muted-foreground leading-relaxed">
             <strong className="text-foreground">Arc Snake</strong> is an experimental Web3 game inspired by the classic Snake experience.
             It&apos;s an independent and experimental project, built for entertainment, learning,
             and testing purposes only.
           </p>
-          <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
+          <p className="text-muted-foreground mt-2 leading-relaxed">
             Snakes are represented as NFTs, allowing players to use them in gameplay, while still
             offering a way to try the game without NFTs for testing and exploration.
           </p>
@@ -55,16 +50,16 @@ export default function AboutPage() {
 
         {/* About Arc */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">About Arc</h3>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          <h3 className="text-2xl font-bold mb-3 tracking-tight">About Arc</h3>
+          <p className="text-muted-foreground leading-relaxed">
             Arc is an open Layer-1 blockchain purpose-built to unite programmable money and onchain
             innovation with real-world economic activity.
           </p>
-          <div className="mb-6">
-            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
+          <div className="mt-4">
+            <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-2">
               Useful Links
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               <li>
                 <a
                   href="https://www.arc.network"
@@ -92,7 +87,7 @@ export default function AboutPage() {
               </li>
             </ul>
           </div>
-          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-200">
+          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 mt-4 text-sm text-yellow-200">
             <span className="shrink-0 text-lg leading-none">⚠️</span>
             <p>
               <span className="font-semibold">Disclaimer:</span> This website is not an official product and is not affiliated in any way with the Arc Testnet / Arc Network team.
@@ -102,8 +97,8 @@ export default function AboutPage() {
 
         {/* Creator */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
-          <p className="text-muted-foreground mb-4">
+          <h3 className="text-2xl font-bold mb-3 tracking-tight">Creator</h3>
+          <p className="text-muted-foreground mb-3">
             ArcSnake was created by an independent developer.
           </p>
           <a
@@ -122,7 +117,7 @@ export default function AboutPage() {
 
         {/* Snake NFT Contract */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">Snake NFT Contract</h3>
+          <h3 className="text-2xl font-bold mb-3 tracking-tight">Snake NFT Contract</h3>
           <div className="bg-muted/30 rounded-lg border border-border/50 p-4 overflow-x-auto">
             <code className="font-mono text-sm text-primary break-all select-all">
               {SNAKE_CONTRACT}
