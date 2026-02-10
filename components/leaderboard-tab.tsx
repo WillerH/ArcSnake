@@ -43,7 +43,7 @@ export function LeaderboardTab() {
           <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
           <p className="text-muted-foreground">
             {isGlobal
-              ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet). Scores are saved online."
+              ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet)."
               : "Local ranking – scores are saved only on this device. Set NEXT_PUBLIC_SUPABASE_* in .env.local and rebuild for global ranking."}
           </p>
         </div>
