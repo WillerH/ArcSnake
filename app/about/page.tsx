@@ -39,16 +39,19 @@ export default function AboutPage() {
           <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
             About Arc Snake
           </h2>
-          <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
-            Arc Snake is an experimental Web3 game inspired by the classic Snake experience.
+        </div>
+
+        <Card className="p-8 border-border/50 gradient-card">
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            <strong className="text-foreground">Arc Snake</strong> is an experimental Web3 game inspired by the classic Snake experience.
             It&apos;s an independent and experimental project, built for entertainment, learning,
             and testing purposes only.
           </p>
-          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
+          <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
             Snakes are represented as NFTs, allowing players to use them in gameplay, while still
             offering a way to try the game without NFTs for testing and exploration.
           </p>
-        </div>
+        </Card>
 
         {/* About Arc */}
         <Card className="p-8 border-border/50 gradient-card">
