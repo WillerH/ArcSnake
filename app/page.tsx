@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
+import Link from "next/link"
 import { Header } from "@/components/header"
 import { PlayTab } from "@/components/play-tab"
 import { MySnakesTab } from "@/components/my-snakes-tab"
@@ -101,6 +102,12 @@ export default function Home() {
               )}
             </button>
           ))}
+          <Link
+            href="/about"
+            className="px-8 py-4 font-semibold text-base transition-all duration-200 relative rounded-t-lg text-muted-foreground hover:text-foreground hover:bg-card/10"
+          >
+            About
+          </Link>
         </div>
 
         {/* Tab Content */}
