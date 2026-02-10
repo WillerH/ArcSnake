@@ -46,11 +46,6 @@ export function LeaderboardTab() {
               ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet). Scores are saved online."
               : "Local ranking – scores are saved only on this device. Set NEXT_PUBLIC_SUPABASE_* in .env.local and rebuild for global ranking."}
           </p>
-          {!isLoading && (
-            <p className="text-sm text-muted-foreground mt-1">
-              Source: {source === "supabase" ? "Supabase (global)" : "local storage"} · {entries.length} player{entries.length !== 1 ? "s" : ""}
-            </p>
-          )}
         </div>
         <Button variant="outline" size="sm" onClick={load} disabled={isLoading} className="shrink-0">
           <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
