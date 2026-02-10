@@ -34,37 +34,21 @@ export default function AboutPage() {
       </header>
 
       <main className="container mx-auto px-6 py-12 max-w-4xl space-y-8">
-        {/* Title */}
+        {/* About Arc Snake */}
         <div>
           <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
             About Arc Snake
           </h2>
           <p className="text-lg text-muted-foreground mt-4 leading-relaxed">
             Arc Snake is an experimental Web3 game inspired by the classic Snake experience.
+            It&apos;s an independent and experimental project, built for entertainment, learning,
+            and testing purposes only.
+          </p>
+          <p className="text-lg text-muted-foreground mt-3 leading-relaxed">
             Snakes are represented as NFTs, allowing players to use them in gameplay, while still
             offering a way to try the game without NFTs for testing and exploration.
           </p>
         </div>
-
-        {/* Creator */}
-        <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
-          <p className="text-muted-foreground mb-4">
-            ArcSnake was created by an independent developer.
-          </p>
-          <a
-            href="https://x.com/Wi113R"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors font-medium"
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            @Wi113R
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        </Card>
 
         {/* About Arc */}
         <Card className="p-8 border-border/50 gradient-card">
@@ -73,7 +57,7 @@ export default function AboutPage() {
             Arc is an open Layer-1 blockchain purpose-built to unite programmable money and onchain
             innovation with real-world economic activity.
           </p>
-          <div>
+          <div className="mb-6">
             <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">
               Useful Links
             </h4>
@@ -105,6 +89,32 @@ export default function AboutPage() {
               </li>
             </ul>
           </div>
+          <div className="flex items-start gap-2 rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-3 text-sm text-yellow-200">
+            <span className="shrink-0 text-lg leading-none">⚠️</span>
+            <p>
+              <span className="font-semibold">Disclaimer:</span> This website is not an official product and is not affiliated in any way with the Arc Testnet / Arc Network team.
+            </p>
+          </div>
+        </Card>
+
+        {/* Creator */}
+        <Card className="p-8 border-border/50 gradient-card">
+          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
+          <p className="text-muted-foreground mb-4">
+            ArcSnake was created by an independent developer.
+          </p>
+          <a
+            href="https://x.com/Wi113R"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors font-medium"
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            @Wi113R
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
         </Card>
 
         {/* Snake NFT Contract */}
