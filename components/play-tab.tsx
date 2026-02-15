@@ -76,7 +76,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
         <p className="text-muted-foreground text-lg">Choose a snake with available energy to play</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {ownedSnakes.map((snake) => {
           const canPlay = snake.energy > 0
           const minutesRemaining = snake.nextPlayTime ? Math.ceil((snake.nextPlayTime - Date.now()) / 60000) : 0
@@ -84,59 +84,59 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
           return (
             <Card
               key={snake.id}
-              className={`p-5 border-border gradient-card transition-all duration-300 overflow-hidden ${
-                canPlay ? "hover:border-primary hover:-translate-y-2 glow-primary cursor-pointer" : "opacity-60"
+              className={`p-6 border-border gradient-card transition-all duration-300 ${
+                canPlay ? "hover:border-primary hover:-translate-y-1 glow-primary cursor-pointer" : "opacity-60"
               }`}
             >
               <div
-                className={`relative w-full aspect-[3/4] rounded-xl mb-4 overflow-hidden ${snake.bgColor} border border-border/50 group`}
+                className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
               >
                 <Image
                   src={PLAY_STANDARDIZED_IMAGES[snake.name] ?? snake.image}
                   alt={snake.name}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  width={288}
+                  height={144}
+                  className="w-full h-full object-cover object-center"
                   unoptimized
                 />
               </div>
 
-              <div className="space-y-3">
-                <div>
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="text-lg font-bold tracking-tight">{snake.name}</h3>
-                    <span className={`text-sm font-bold ${snake.rarityColor}`}>{snake.rarity}</span>
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{snake.description}</p>
-                </div>
+              <h3 className="text-2xl font-bold mb-2 tracking-tight">{snake.name}</h3>
+              <p className="text-sm text-muted-foreground mb-5 leading-relaxed">{snake.description}</p>
 
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Multiplier</span>
+              <div className="space-y-3 mb-5">
+                <div className="flex justify-between text-base">
+                  <span className="text-muted-foreground font-medium">Level {snake.level}</span>
+                  <span className={`font-bold ${snake.rarityColor}`}>{snake.rarity}</span>
+                </div>
+                <div className="flex justify-between text-base">
+                  <span className="text-muted-foreground font-medium">Multiplier</span>
                   <span className="font-bold text-primary">{snake.multiplier}x</span>
                 </div>
-                <div className="flex items-center justify-between text-sm">
-                  <span className="text-muted-foreground">Energy</span>
+                <div className="flex justify-between text-base">
+                  <span className="text-muted-foreground font-medium">Energy</span>
                   <span className="font-bold">
                     {snake.energy}/{snake.maxEnergy}
                   </span>
                 </div>
-
-                {canPlay ? (
-                  <Button
-                    onClick={() => {
-                      setSelectedSnake(snake)
-                      setIsPlaying(true)
-                    }}
-                    className="w-full gap-2 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all duration-200 hover:scale-105 glow-primary py-5 font-semibold text-sm"
-                  >
-                    <Play className="w-4 h-4" />
-                    Play Now
-                  </Button>
-                ) : (
-                  <div className="text-center p-3 bg-muted/30 rounded-lg border border-border/50">
-                    <p className="text-sm text-muted-foreground font-medium">Next play in {minutesRemaining} min</p>
-                  </div>
-                )}
               </div>
+
+              {canPlay ? (
+                <Button
+                  onClick={() => {
+                    setSelectedSnake(snake)
+                    setIsPlaying(true)
+                  }}
+                  className="w-full gap-2 bg-gradient-to-r from-primary to-accent hover:opacity-90 transition-all duration-200 hover:scale-105 glow-primary py-6 font-semibold text-base"
+                >
+                  <Play className="w-5 h-5" />
+                  Play Now
+                </Button>
+              ) : (
+                <div className="text-center p-4 bg-muted/30 rounded-lg border border-border/50">
+                  <p className="text-base text-muted-foreground font-medium">Next play in {minutesRemaining} minutes</p>
+                </div>
+              )}
             </Card>
           )
         })}
