@@ -76,7 +76,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
         <p className="text-muted-foreground text-lg">Choose a snake with available energy to play</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {ownedSnakes.map((snake) => {
           const canPlay = snake.energy > 0
           const minutesRemaining = snake.nextPlayTime ? Math.ceil((snake.nextPlayTime - Date.now()) / 60000) : 0
@@ -84,19 +84,18 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
           return (
             <Card
               key={snake.id}
-              className={`p-6 border-border gradient-card transition-all duration-300 ${
+              className={`p-6 border-border gradient-card transition-all duration-300 overflow-hidden ${
                 canPlay ? "hover:border-primary hover:-translate-y-1 glow-primary cursor-pointer" : "opacity-60"
               }`}
             >
               <div
-                className={`w-full h-36 rounded-xl mb-5 flex items-center justify-center overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
+                className={`relative w-full aspect-[16/9] rounded-xl mb-5 overflow-hidden ${snake.bgColor} border border-border/50 transition-transform duration-200 hover:scale-105`}
               >
                 <Image
                   src={PLAY_STANDARDIZED_IMAGES[snake.name] ?? snake.image}
                   alt={snake.name}
-                  width={288}
-                  height={144}
-                  className="w-full h-full object-cover object-center"
+                  fill
+                  className="object-contain"
                   unoptimized
                 />
               </div>
@@ -134,7 +133,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
                 </Button>
               ) : (
                 <div className="text-center p-4 bg-muted/30 rounded-lg border border-border/50">
-                  <p className="text-base text-muted-foreground font-medium">Next play in {minutesRemaining} minutes</p>
+                  <p className="text-base text-muted-foreground font-medium">Next play in {minutesRemaining} min</p>
                 </div>
               )}
             </Card>
