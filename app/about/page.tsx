@@ -8,7 +8,7 @@ const SNAKE_CONTRACT = "0x2A1FBF5eAE3124FD3A9af8BD0eaB235e9D1Ae469"
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen">
       {/* Minimal header with back link */}
       <header className="border-b border-border gradient-header backdrop-blur-md sticky top-0 z-50 shadow-xl">
         <div className="container mx-auto px-6 py-5 flex items-center justify-between max-w-7xl">
