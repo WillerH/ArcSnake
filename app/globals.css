@@ -91,11 +91,19 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
-    /* Added smooth text rendering for better typography */
+    @apply text-foreground;
+    background: linear-gradient(120deg, #0B0E14, #111827, #0B0E14);
+    background-size: 400% 400%;
+    animation: bgMove 20s ease infinite;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+  }
+
+  @keyframes bgMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
   }
 
   /* Custom glow utilities for Web3 aesthetic */
