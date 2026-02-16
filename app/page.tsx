@@ -83,7 +83,7 @@ export default function Home() {
         <div className="flex flex-wrap gap-3 mb-12 border-b border-border pb-1">
           {[
             { id: "play", label: "Play" },
-            { id: "snakes", label: "My Snakes" },
+            { id: "snakes", label: "Buy Snake" },
             { id: "leaderboard", label: "Leaderboard" },
             { id: "training", label: "Training Mode" },
           ].map((tab) => (
