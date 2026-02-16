@@ -240,11 +240,11 @@ export function MySnakesTab({
                       </div>
                       <div>
                         <span className="text-muted-foreground block text-xs">Multiplier</span>
-                        <p className="font-bold text-primary">{snake.multiplier}x</p>
+                        <p className="font-bold text-white">{snake.multiplier}x</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground block text-xs">Energy</span>
-                        <p className="font-bold text-primary">
+                        <p className="font-bold text-white">
                           {snake.energy}/{snake.maxEnergy}
                         </p>
                       </div>
