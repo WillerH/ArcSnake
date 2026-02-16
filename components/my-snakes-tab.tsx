@@ -260,12 +260,6 @@ export function MySnakesTab({
                       <Progress value={xpProgress} className="h-2" />
                     </div>
 
-                    <Button
-                      className="w-full bg-card/50 hover:bg-card border-border hover:border-primary transition-all duration-200 py-5 font-semibold text-sm"
-                      variant="outline"
-                    >
-                      View Details
-                    </Button>
                   </div>
                 </Card>
               )
