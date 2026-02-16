@@ -108,6 +108,14 @@ export default function Home() {
           >
             About
           </Link>
+          <a
+            href="https://easyfaucetarc.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-8 py-4 font-semibold text-base transition-all duration-200 relative rounded-t-lg text-muted-foreground hover:text-foreground hover:bg-card/10"
+          >
+            Faucet
+          </a>
         </div>
 
         {/* Tab Content */}
