@@ -248,16 +248,6 @@ export function MySnakesTab({
                           {snake.energy}/{snake.maxEnergy}
                         </p>
                       </div>
-                      <div>
-                        <span className="text-muted-foreground block text-xs">XP</span>
-                        <p className="font-bold text-primary">
-                          {snake.xp}/{snake.xpToNextLevel}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Progress value={xpProgress} className="h-2" />
                     </div>
 
                   </div>
