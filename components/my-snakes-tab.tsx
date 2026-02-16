@@ -233,7 +233,7 @@ export function MySnakesTab({
                       <p className="text-xs text-muted-foreground leading-relaxed">{snake.description}</p>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2 text-sm">
+                    <div className="grid grid-cols-3 gap-2 text-sm">
                       <div>
                         <span className="text-muted-foreground block text-xs">Level</span>
                         <p className="font-bold">{snake.level}</p>
