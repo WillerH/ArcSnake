@@ -236,7 +236,7 @@ export function MySnakesTab({
                     <div className="grid grid-cols-3 gap-2 text-sm">
                       <div>
                         <span className="text-muted-foreground block text-xs">Level</span>
-                        <p className="font-bold">{snake.level}</p>
+                        <p className="font-bold text-primary">{snake.level}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground block text-xs">Multiplier</span>
@@ -244,7 +244,7 @@ export function MySnakesTab({
                       </div>
                       <div>
                         <span className="text-muted-foreground block text-xs">Energy</span>
-                        <p className="font-bold">
+                        <p className="font-bold text-primary">
                           {snake.energy}/{snake.maxEnergy}
                         </p>
                       </div>
