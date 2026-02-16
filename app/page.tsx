@@ -7,6 +7,7 @@ import { PlayTab } from "@/components/play-tab"
 import { MySnakesTab } from "@/components/my-snakes-tab"
 import { LeaderboardTab } from "@/components/leaderboard-tab"
 import { TrainingModeTab } from "@/components/training-mode-tab"
+import { ExternalLink } from "lucide-react"
 import { type SnakeNFT } from "@/lib/snake-data"
 import { useWallet } from "@/components/ClientWeb3Providers"
 import { fetchMySnakes } from "@/lib/arc-web3"
@@ -112,9 +113,12 @@ export default function Home() {
             href="https://easyfaucetarc.xyz/"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-8 py-4 font-semibold text-base transition-all duration-200 relative rounded-t-lg text-muted-foreground hover:text-foreground hover:bg-card/10"
+            title="Opens in a new tab"
+            aria-label="Faucet – opens in a new tab"
+            className="px-8 py-4 font-semibold text-base transition-all duration-200 relative rounded-t-lg text-muted-foreground hover:text-foreground hover:bg-card/10 inline-flex items-center gap-1.5 group"
           >
             Faucet
+            <ExternalLink className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
           </a>
         </div>
 
