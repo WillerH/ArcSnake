@@ -102,13 +102,8 @@ export function MySnakesTab({
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-3xl font-bold mb-3 tracking-tight">My Snake Collection</h2>
-        <p className="text-muted-foreground text-lg mb-2">Your NFT snakes and their progression</p>
-      </div>
-
       <div className="space-y-6">
-        <div className="border-t border-border/50 pt-8">
+        <div>
           <h3 className="text-2xl font-bold mb-3 tracking-tight">NFT Marketplace</h3>
           <p className="text-muted-foreground text-lg mb-6">Purchase snake NFTs with USDC</p>
         </div>
