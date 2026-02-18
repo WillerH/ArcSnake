@@ -50,6 +50,26 @@ export default function AboutPage() {
           </p>
         </Card>
 
+        {/* Creator */}
+        <Card className="p-8 border-border/50 gradient-card">
+          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
+          <p className="text-muted-foreground mb-4">
+            ArcSnake was created by an independent developer.
+          </p>
+          <a
+            href="https://x.com/Wi113R"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors font-medium"
+          >
+            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+            @Wi113R
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+        </Card>
+
         {/* About Arc */}
         <Card className="p-8 border-border/50 gradient-card">
           <h3 className="text-2xl font-bold mb-4 tracking-tight">About Arc</h3>
@@ -95,26 +115,6 @@ export default function AboutPage() {
               <span className="font-semibold">Disclaimer:</span> This website is not an official product and is not affiliated in any way with the Arc Testnet / Arc Network team.
             </p>
           </div>
-        </Card>
-
-        {/* Creator */}
-        <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
-          <p className="text-muted-foreground mb-4">
-            ArcSnake was created by an independent developer.
-          </p>
-          <a
-            href="https://x.com/Wi113R"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-primary hover:text-accent transition-colors font-medium"
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-current" aria-hidden="true">
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-            @Wi113R
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
         </Card>
 
         {/* Snake NFT Contract */}
