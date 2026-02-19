@@ -29,7 +29,7 @@ export function TrainingModeTab() {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold mb-2">Training Mode</h2>
-        <p className="text-muted-foreground">Practice without using your NFT snakes</p>
+        <p className="text-muted-foreground">Practice without using NFT snakes</p>
       </div>
 
       <Card className="p-8 border-border/50 bg-card/50">
