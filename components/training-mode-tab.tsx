@@ -47,7 +47,7 @@ export function TrainingModeTab() {
 
           <div className="text-center">
             <div className="inline-block p-8 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl mb-4">
-              <div className="text-8xl">{trainingSnake.emoji}</div>
+              <div className="text-8xl">🐍</div>
             </div>
             <h3 className="text-xl font-bold mb-2">{trainingSnake.name}</h3>
             <p className="text-muted-foreground mb-6">{trainingSnake.description}</p>
