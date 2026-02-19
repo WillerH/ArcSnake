@@ -40,7 +40,7 @@ export function TrainingModeTab() {
                 <li>• Free to play with no NFT required</li>
                 <li>• Scores do not count toward leaderboard</li>
                 <li>• No XP earned</li>
-                <li>—Just have fun!—</li>
+                <li>• Have fun!</li>
               </ul>
             </div>
           </div>
