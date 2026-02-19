@@ -1,11 +1,13 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { Card } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { SnakeGame } from "@/components/snake-game"
 import { SNAKE_TYPES } from "@/lib/snake-data"
 import { Play, Info } from "lucide-react"
+import trainingRattlesnake from "../pattern/rattlesnake_standardized_371x237.png"
 
 export function TrainingModeTab() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -46,8 +48,12 @@ export function TrainingModeTab() {
           </div>
 
           <div className="text-center">
-            <div className="inline-block p-8 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl mb-4">
-              <div className="text-4xl">🐍</div>
+            <div className="inline-block p-4 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-xl mb-4">
+              <Image
+                src={trainingRattlesnake}
+                alt="Rattlesnake training snake"
+                className="mx-auto rounded-lg"
+              />
             </div>
             <h3 className="text-xl font-bold mb-2">{trainingSnake.name}</h3>
             <p className="text-muted-foreground mb-6">{trainingSnake.description}</p>
