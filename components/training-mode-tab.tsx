@@ -38,10 +38,9 @@ export function TrainingModeTab() {
               <h3 className="font-semibold">Training Mode Features</h3>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Free to play with no NFT required</li>
-                <li>• Uses a default Corn Snake</li>
                 <li>• Scores do not count toward leaderboard</li>
                 <li>• No XP earned</li>
-                <li>• Perfect for learning the game mechanics</li>
+                <li>—Just have fun!—</li>
               </ul>
             </div>
           </div>
