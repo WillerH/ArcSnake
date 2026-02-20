@@ -72,7 +72,7 @@ export default function AboutPage() {
 
         {/* About Arc */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">About Arc</h3>
+          <h3 className="text-2xl font-bold mb-4 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">About Arc</h3>
           <p className="text-muted-foreground mb-6 leading-relaxed">
             Arc is an open Layer-1 blockchain purpose-built to unite programmable money and onchain
             innovation with real-world economic activity.
