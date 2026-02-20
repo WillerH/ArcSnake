@@ -40,7 +40,7 @@ export function LeaderboardTab() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold mb-2">Leaderboard</h2>
+          <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">Leaderboard</h2>
           <p className="text-muted-foreground">
             {isGlobal
               ? "Global ranking – top 1000 players on Arc Testnet (best score per wallet)."
