@@ -72,7 +72,7 @@ export function PlayTab({ isWalletConnected, ownedSnakes, onUpdateSnake, walletA
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-3xl font-bold mb-3 tracking-tight">Select Your Snake</h2>
+        <h2 className="text-3xl font-bold mb-3 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">Select Your Snake</h2>
         <p className="text-muted-foreground text-lg">Choose a snake with available energy to play</p>
       </div>
 
