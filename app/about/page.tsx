@@ -52,7 +52,7 @@ export default function AboutPage() {
 
         {/* Creator */}
         <Card className="p-8 border-border/50 gradient-card">
-          <h3 className="text-2xl font-bold mb-4 tracking-tight">Creator</h3>
+          <h3 className="text-2xl font-bold mb-4 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">Creator</h3>
           <p className="text-muted-foreground mb-4">
             ArcSnake was created by an independent developer.
           </p>
