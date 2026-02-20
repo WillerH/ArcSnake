@@ -104,7 +104,7 @@ export function MySnakesTab({
     <div className="space-y-8">
       <div className="space-y-6">
         <div>
-          <h3 className="text-2xl font-bold mb-3 tracking-tight">NFT Marketplace</h3>
+          <h3 className="text-2xl font-bold mb-3 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">NFT Marketplace</h3>
           <p className="text-muted-foreground text-lg mb-6">Purchase snake NFTs with USDC</p>
         </div>
 
