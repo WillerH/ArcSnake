@@ -121,7 +121,7 @@ export default function AboutPage() {
         <Card className="p-8 border-border/50 gradient-card">
           <h3 className="text-2xl font-bold mb-4 tracking-tight bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">Snake NFT Contract</h3>
           <div className="bg-muted/30 rounded-lg border border-border/50 p-4 overflow-x-auto">
-            <code className="font-mono text-sm text-primary break-all select-all">
+            <code className="font-mono text-sm text-white break-all select-all">
               {SNAKE_CONTRACT}
             </code>
           </div>
